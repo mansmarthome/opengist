@@ -108,7 +108,7 @@ func (store *LocaleStore) MatchTag(langs []language.Tag) string {
 		}
 	}
 
-	return "en-US"
+	return "ru-RU"
 }
 
 func (l *Locale) String(key string, args ...any) string {
