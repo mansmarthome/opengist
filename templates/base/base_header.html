@@ -55,7 +55,7 @@
 <div id="app" class="text-gray-700 dark:text-white min-h-full bg-white dark:bg-gray-900">
     <div class="min-h-full">
         <nav>
-            <div class="px-1 sm:px-6">
+            <div class="px-1 sm:px-9">
                 <div class="relative flex items-center justify-between h-20">
                     <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
                         <!-- Mobile menu button-->
@@ -71,10 +71,10 @@
                     </div>
                     <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                         <div class="hidden sm:block">
-                            <div class="flex space-x-4">
-                                <a href="{{ $.c.ExternalUrl }}/all" class="text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white px-3 py-2 font-medium">Главная</a>
-                                <a href="https://mansmarthome.info/" class="text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white px-3 py-2 font-medium">Назад в блог</a>
-                                <a href="https://mansmarthome.info/authors/roland/" class="text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white px-3 py-2 font-medium">Контакты</a>
+                            <div class="flex space-x-7">
+                                <a href="{{ $.c.ExternalUrl }}/all" class="text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white py-2 font-medium">Все</a>
+                                <a href="https://mansmarthome.info/" class="text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white py-2 font-medium">Назад в блог</a>
+                                <a href="https://mansmarthome.info/authors/roland/" class="text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white py-2 font-medium">Контакты</a>
                                 <div class="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
                                     <div class="w-full max-w-lg lg:max-w-xs">
                                         <label for="search" class="sr-only">{{ .locale.Tr "header.menu.search" }}</label>
@@ -205,7 +205,7 @@
                     </div>
                 </div>
                 <div class="px-2 pt-2 pb-3 space-y-1">
-                    <a href="{{ $.c.ExternalUrl }}/all" class="text-slate-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white block px-3 py-2 text-base font-medium">Главная</a>
+                    <a href="{{ $.c.ExternalUrl }}/all" class="text-slate-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white block px-3 py-2 text-base font-medium">Все</a>
                     <a href="https://mansmarthome.info/" class="text-slate-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white block px-3 py-2 text-base font-medium">Назад в блог</a>
                     <a href="https://mansmarthome.info/authors/roland/" class="text-slate-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-black dark:hover:text-white block px-3 py-2 text-base font-medium">Контакты</a>
                     {{ if .userLogged }}

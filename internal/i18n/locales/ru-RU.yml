@@ -4,7 +4,7 @@ gist.private: Приватный
 
 gist.header.like: Нравится
 gist.header.unlike: Не нравится
-gist.header.fork: Создать форк
+gist.header.fork: Форкнуть
 gist.header.edit: Редактировать
 gist.header.delete: Удалить
 gist.header.forked-from: Форк с
