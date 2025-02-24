@@ -29,7 +29,7 @@
             <div class="grid gap-y-4">
                 {{ if ne (len $commit.Files) 0 }}
                     {{ range $file := $commit.Files }}
-                    <div class="rounded-md border border-1 border-gray-200 dark:border-gray-700 overflow-auto">
+                    <div class="border border-1 border-gray-200 dark:border-gray-700 overflow-auto">
                         <div class="border-b-1 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 my-auto">
                             <p class="ml-4 mt-2 inline-flex">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex text-slate-700 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
