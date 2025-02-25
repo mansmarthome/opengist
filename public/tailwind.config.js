@@ -26,17 +26,17 @@ module.exports = {
       },
       rose: colors.rose,
       primary: {
-        50: "#CC3336",
-        100: "#CC3336",
+        50: "#D65C5E",
+        100: "#D65C5E",
         200: "#CC3336",
-        300: "#CC3336",
-        400: "#CC3336",
+        300: "#D65C5E",
+        400: "#D65C5E",
         500: "#CC3336",
         600: "#A3292B",
         700: "#7A1F20",
         800: "#521415",
         900: "#290A0B",
-        950: "#140505"
+        950: "#CC3336"
       },
       slate: colors.slate
     },
@@ -45,13 +45,15 @@ module.exports = {
         slate: {
           600: '#73777d',
           700: '#222426',
-        }
+        },
       },
       borderWidth: {
         '1': '1px',
       },
       boxShadow: {
         'DEFAULT': 'none',
+        'sm': 'none',
+        // 'lg': 'none',
       },
       borderRadius: {
         'lg': '0',

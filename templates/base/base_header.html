@@ -113,12 +113,12 @@
                         <div id="user-btn" class="hidden sm:flex items-center ml-3 cursor-pointer px-3 py-2">
                             <div class="inline-flex">
                                 <p class="hidden sm:block text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white font-medium mr-2">{{ .userLogged.Username }}</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5 inline-block">
+                                <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5 inline-block">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                </svg>
+                                </svg> -->
                             </div>
                             <div class="hidden relative sm:inline-block text-left">
-                                <div id="user-menu" class="hidden w-max font-medium absolute right-0 z-10 mt-6 origin-top-right divide-y dark:divide-gray-600 divide-gray-100 rounded-md dark:bg-gray-800 bg-white shadow-lg ring-1 ring-gray-50 dark:ring-gray-700 focus:outline-none">
+                                <div id="user-menu" class="hidden w-max font-medium absolute right-0 z-10 mt-6 origin-top-right divide-y dark:divide-gray-600 divide-gray-100 rounded-md dark:bg-gray-800 bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-800 dark:ring-gray-700">
                                     <div class="py-1" role="none">
                                         <a href="{{ $.c.ExternalUrl }}/{{ .userLogged.Username }}" class="dark:text-slate-300 text-slate-700 group flex items-center px-3 py-1.5 pr-6 text-sm w-full hover:text-slate-500 dark:hover:text-slate-400" role="menuitem" tabindex="-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-5 w-5 text-slate-600 dark:text-slate-400 group-hover:text-slate-500">
@@ -167,19 +167,19 @@
                         {{ end }}
 
                         <div class="ml-3 relative inline-block">
-                            <a href="https://t.me/mansmarthome" target="_blank" rel="nofollow noopener" title="Анонсы и бонусный контент в Telegram" class="cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 inline-block">
+                            <a href="https://t.me/mansmarthome" target="_blank" rel="nofollow noopener" title="Анонсы и бонусный контент в Telegram" class="cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="mb-1 w-5 h-5 inline-block">
                                 <path d="M12 1C5.923 1 1 5.923 1 12s4.923 11 11 11 11-4.923 11-11S18.077 1 12 1Zm5.402 7.536-1.805 8.507c-.133.603-.492.75-.993.466l-2.75-2.027-1.327 1.277c-.146.147-.27.27-.554.27l.195-2.798 5.097-4.604c.221-.195-.05-.306-.342-.11L8.625 13.48l-2.715-.847c-.59-.186-.603-.59.124-.874L16.64 7.671c.492-.177.922.12.762.865z"/>
                             </svg>
                             </a>
                         </div>
                         <div class="ml-3 relative inline-block">
-                            <a href="https://www.youtube.com/@mansmarthome" target="_blank" rel="nofollow noopener" title="YouTube" class="cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 inline-block">
+                            <a href="https://www.youtube.com/@mansmarthome" target="_blank" rel="nofollow noopener" title="YouTube" class="cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="mb-1 w-5 h-5 inline-block">
                                 <path d="M23.02 6.53a2.89 2.89 0 0 0-2.034-2.047C19.193 4 12 4 12 4s-7.193 0-8.986.483A2.89 2.89 0 0 0 .981 6.53C.5 8.335.5 12.102.5 12.102s0 3.766.48 5.573a2.847 2.847 0 0 0 2.034 2.013c1.793.483 8.986.483 8.986.483s7.193 0 8.986-.483a2.847 2.847 0 0 0 2.033-2.015c.481-1.805.481-5.572.481-5.572s0-3.766-.48-5.571zM9.647 15.52V8.685l6.011 3.418z"/>
                             </svg>
                             </a>
                         </div>
                         <div class="ml-3 relative inline-block">
-                            <a href="https://boosty.to/mansmarthome" target="_blank" rel="nofollow noopener" title="Закулисная жизнь на Boosty" class="cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 inline-block">
+                            <a href="https://boosty.to/mansmarthome" target="_blank" rel="nofollow noopener" title="Закулисная жизнь на Boosty" class="cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="mb-1 w-5 h-5 inline-block">
                                 <path d="M44.3 164.5 76.9 51.6H127l-10.1 35-.3.6L90 179.6h24.8c-10.4 25.9-18.5 46.2-24.3 60.9-45.8-.5-58.6-33.3-47.4-72.1m47.6 72.2 60.4-86.9h-25.6L147.8 98c38.2 4 56.2 34.1 45.6 70.5-11.3 39.1-57.1 72.1-101.7 72.1h-1z" transform="translate(-1.717 -5.006) scale(.1164)"/>
                             </svg>
                             </a>

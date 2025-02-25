@@ -1,0 +1,17 @@
+a {
+    color: inherit;
+}
+
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
+    @apply underline;
+}
+
+header {
+    @apply mb-8;
+}
+
+button.hover\:bg-gray-100:hover,
+a.hover\:bg-gray-100:hover {
+    background-color: transparent;
+    @apply border-primary-500;
+}

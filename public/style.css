@@ -14,14 +14,6 @@ html {
     @apply bg-gray-50 dark:bg-gray-800;
 }
 
-a {
-    color: inherit;
-}
-
-h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
-    @apply underline;
-}
-
 input {
     @apply placeholder-gray-300 dark:placeholder-gray-400;
 }
