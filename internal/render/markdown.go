@@ -45,7 +45,7 @@ func newMarkdown(extraExtensions ...goldmark.Extender) goldmark.Markdown {
 	extensions := []goldmark.Extender{
 		extension.GFM,
 		highlighting.NewHighlighting(
-			highlighting.WithStyle("catppuccin-latte"),
+			highlighting.WithStyle("github"),
 			highlighting.WithFormatOptions(html.WithClasses(true)),
 		),
 		emoji.Emoji,

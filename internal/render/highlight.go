@@ -180,7 +180,7 @@ func newLexer(filename string) chroma.Lexer {
 
 func newStyle() *chroma.Style {
 	var style *chroma.Style
-	if style = styles.Get("catppuccin-latte"); style == nil {
+	if style = styles.Get("github"); style == nil {
 		style = styles.Fallback
 	}
 
