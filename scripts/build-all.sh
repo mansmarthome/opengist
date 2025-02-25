@@ -2,7 +2,7 @@
 
 CHECKSUMS_FILE="build/checksums.txt"
 BINARY_NAME="opengist"
-TARGETS="darwin/amd64 darwin/arm64 linux/amd64 linux/arm64 linux/armv6 linux/armv7 linux/386 windows/amd64"
+TARGETS="linux/amd64"
 VERSION=$(git describe --tags | sed 's/^v//')
 VERSION_PKG="github.com/thomiceli/opengist/internal/config.OpengistVersion"
 

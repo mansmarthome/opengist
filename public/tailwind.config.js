@@ -21,8 +21,8 @@ module.exports = {
         500: "#585B68",
         600: "#464853",
         700: "#363840",
-        800: "transparent",
-        900: "transparent"
+        800: "#232429",
+        900: "#222426"
       },
       rose: colors.rose,
       primary: {
