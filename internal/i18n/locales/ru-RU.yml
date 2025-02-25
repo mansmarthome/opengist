@@ -53,10 +53,10 @@ gist.list.joined: Зарегистрирован
 gist.list.all: Все фрагменты
 gist.list.search-results: Результаты  поиска
 gist.list.sort: Сортировка
-gist.list.sort-by-created: по дате создания
-gist.list.sort-by-updated: по дате обновления
-gist.list.order-by-asc: Свежие снизу
-gist.list.order-by-desc: Свежие сверху
+gist.list.sort-by-created: созданные
+gist.list.sort-by-updated: обновленные
+gist.list.order-by-asc: Давно
+gist.list.order-by-desc: Недавно
 gist.list.select-tab: Перейти
 gist.list.liked: Понравившиеся
 gist.list.likes: лайк(-ов)
