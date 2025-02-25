@@ -1,4 +1,4 @@
-:root {
+:root:not(.dark) {
     @import "github-markdown-css/github-markdown-light";
     @import './github';
 }
