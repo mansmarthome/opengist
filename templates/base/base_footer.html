@@ -7,16 +7,28 @@
 </div>
 
 <div class="py-8 px-4 sm:px-9 flex flex-col items-center justify-between md:flex-row">
-    {{ if ne (len .c.StaticLinks) 0 }}
-    <div class="sm:mr-1.5 py-1.5 grow flex flex-wrap justify-center sm:justify-normal">
+    <div class="sm:mr-1.5 grow flex flex-wrap justify-center sm:justify-normal text-center space-x-5">
+        <span class="py-1.5 text-slate-600 dark:text-slate-400">
+            <a href="/roland" class="hover:text-slate-800 dark:hover:text-slate-200">/roland</a> под <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.ru" target="_blank" rel="nofollow" class="hover:text-slate-800 dark:hover:text-slate-200">CC0 1.0</a>,
+            права на другие фрагменты принадлежат их авторам
+        </span>
+        {{ if ne (len .c.StaticLinks) 0 }}
         {{ range $index, $value := .c.StaticLinks }}
-            <a href="{{ if isUrl .Path }}{{ .Path }}{{ else }}{{ $.c.ExternalUrl }}/assets/{{ .Path }}{{ end }}" target="_blank" rel="nofollow" class="mr-5 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 inline-flex">{{ .Name }}</a>
+            <a href="{{ if isUrl .Path }}{{ .Path }}{{ else }}{{ $.c.ExternalUrl }}/assets/{{ .Path }}{{ end }}" target="_blank" rel="nofollow" class="py-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">{{ .Name }}</a>
+        {{ end }}
         {{ end }}
     </div>
-    {{ end }}
 
-    <div class="flex">
-        <p class="py-1.5 text-slate-600 dark:text-slate-400 [&>*]:mx-1.5 -ml-1.5 flex">
+    <div class="flex flex-wrap justify-center sm:justify-normal">
+        <p class="py-1.5 text-slate-600 dark:text-slate-400 [&>*]:mx-1.5 flex">
+            <span>
+                <a target="_blank" style="margin-left: 0 !important;" class="text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 inline-flex" href="https://netangels.ru/?p_ref=u102268" rel="nofollow">
+                    Хостится на NetAngels
+                </a>
+            </span>&bull;
+        </p>
+
+        <p class="py-1.5 text-slate-600 dark:text-slate-400 [&>*]:mx-1.5 flex">
             <span>
                 <a target="_blank" style="margin-left: 0 !important;" class="text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 inline-flex" href="https://github.com/thomiceli/opengist" rel="nofollow">
                     {{ .locale.Tr "footer.powered-by" "Opengist" }}
