@@ -1,0 +1,39 @@
+{{ define "_comments" }}
+<section id="comments" class="mt-4 p-8 border border-1 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"></section>
+<script type="module">
+  import { init } from 'https://mansmarthome.info/assets/js/waline.js?v=643c185cc7';
+  init({
+    el: '#comments',
+    serverURL: 'https://comments.mansmarthome.info',
+    path: window.location.pathname,
+    lang: 'ru-RU',
+    search: false,
+    login: 'disable',
+    meta: ['nick', 'mail'],
+    requiredMeta: ['nick'],
+    imageUploader: false,
+    dark: 'html.dark',
+    emoji: false,
+    locale: {
+      admin: 'Автор',
+      reactionTitle: 'Что думаете?',
+      nick: 'Имя',
+      nickError: 'Пожалуйста, укажите имя',
+      mail: 'Email ',
+      optional: 'опционально',
+      placeholder: 'Текст комментария...',
+      word: '',
+      preview: 'Предпросмотр (поддерживается Markdown)',
+      oldest: 'старые',
+      latest: 'последние',
+      hottest: 'популярные',
+      reply: 'Ответить',
+      sticky: 'Закрепленный',
+      unsticky: 'Незакрепленный',
+      hours: 'часов назад',
+      days: 'дней назад',
+      like: 'Нравится',
+    },
+  });
+</script>
+{{ end }}

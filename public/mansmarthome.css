@@ -1,3 +1,4 @@
+/* BASE */
 a {
     color: inherit;
 }
@@ -29,4 +30,104 @@ a.hover\:bg-gray-100:hover {
 .dark .markdown-body a:hover,
 .dark .markdown-body a:focus {
     box-shadow: inset 0 -3px 0 theme('colors.primary.500');
+}
+
+/* COMMENTS */
+:root {
+  --waline-font-size: 1.4em;
+  --waline-theme-color: #CC3336;
+  --waline-active-color: color-mix(in srgb, #CC3336 92%, transparent);
+  --waline-border-color: theme('colors.gray.200')
+}
+#comments {
+    font-size: 10px;
+}
+#comments .wl-reaction {
+  overflow: initial;
+}
+#comments .wl-reaction-text {
+  display: none;
+}
+#comments .wl-header {
+  display: block;
+}
+#comments .wl-header-item {
+  margin: .25em 0;
+  flex-wrap: wrap;
+}
+#comments .wl-header input,
+#comments .wl-header label,
+#comments .wl-header .wl-editor {
+  font-size: .9em;
+}
+#comments .wl-editor,
+#comments .wl-header input {
+  box-sizing: border-box;
+  padding: .3em;
+  margin: .5em;
+  box-shadow: none !important;
+  outline: none !important;
+}
+#comments .wl-header label {
+  min-width: 0;
+  padding: 0;
+  margin: .8em;
+}
+#comments .wl-header label::after {
+  content: ":";
+}
+#comments .wl-header-item:last-child::after {
+  content: "Укажите email, чтобы узнать о новых ответах на ваш комментарий 👆";
+  flex-grow: 1;
+  flex-basis: 100%;
+  margin: .8em;
+  font-size: .9em;
+}
+#comments .wl-count .wl-num {
+  display: none;
+}
+#comments .wl-action {
+  margin-right: 6px;
+}
+#comments .wl-panel,
+#comments .wl-editor {
+  border-radius: 0;
+}
+#comments .wl-footer .wl-actions {
+  justify-content: space-between;
+}
+#comments .wl-footer .wl-info {
+  flex-grow: 0;
+  flex-shrink: 1;
+}
+#comments .wl-footer .wl-info .wl-text-number {
+  display: none;
+}
+#comments .wl-footer .wl-btn {
+  font-size: 1em;
+  border-radius: 4em;
+  padding-left: 1.25em;
+  padding-right: 1.25em;
+  color: white;
+}
+#comments .wl-card .wl-content {
+  font-size: 1em;
+}
+#comments .wl-card .wl-content .hljs .lines {
+  display: none;
+}
+#comments .wl-card .wl-quote {
+  border: 0;
+}
+#comments .wl-card > .wl-content > p {
+  display: none;
+}
+#comments .wl-card > .wl-content > div > :first-child {
+  margin-top: 0;
+}
+#comments .wl-card > .wl-content > div > :last-child {
+  margin-bottom: 0;
+}
+#comments [data-waline] li {
+  color: var(--waline-color);
 }
