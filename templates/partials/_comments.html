@@ -5,7 +5,7 @@
   init({
     el: '#comments',
     serverURL: 'https://comments.mansmarthome.info',
-    path: window.location.pathname,
+    path: '/{{ .gist.User.Username }}/{{ .gist.Identifier }}',
     lang: 'ru-RU',
     search: false,
     login: 'disable',
