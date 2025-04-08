@@ -37,8 +37,11 @@ type config struct {
 	DBUri      string `yaml:"db-uri" env:"OG_DB_URI"`
 	DBFilename string `yaml:"db-filename" env:"OG_DB_FILENAME"` // deprecated
 
-	IndexEnabled bool   `yaml:"index.enabled" env:"OG_INDEX_ENABLED"`
-	IndexDirname string `yaml:"index.dirname" env:"OG_INDEX_DIRNAME"`
+	IndexEnabled bool   `yaml:"index.enabled" env:"OG_INDEX_ENABLED"` // deprecated
+	Index        string `yaml:"index" env:"OG_INDEX"`
+	BleveDirname string `yaml:"index.dirname" env:"OG_INDEX_DIRNAME"` // deprecated
+	MeiliHost    string `yaml:"index.meili.host" env:"OG_MEILI_HOST"`
+	MeiliAPIKey  string `yaml:"index.meili.api-key" env:"OG_MEILI_API_KEY"`
 
 	GitDefaultBranch string `yaml:"git.default-branch" env:"OG_GIT_DEFAULT_BRANCH"`
 
@@ -67,9 +70,14 @@ type config struct {
 	GiteaUrl       string `yaml:"gitea.url" env:"OG_GITEA_URL"`
 	GiteaName      string `yaml:"gitea.name" env:"OG_GITEA_NAME"`
 
-	OIDCClientKey    string `yaml:"oidc.client-key" env:"OG_OIDC_CLIENT_KEY"`
-	OIDCSecret       string `yaml:"oidc.secret" env:"OG_OIDC_SECRET"`
-	OIDCDiscoveryUrl string `yaml:"oidc.discovery-url" env:"OG_OIDC_DISCOVERY_URL"`
+	OIDCProviderName   string `yaml:"oidc.provider-name" env:"OG_OIDC_PROVIDER_NAME"`
+	OIDCClientKey      string `yaml:"oidc.client-key" env:"OG_OIDC_CLIENT_KEY"`
+	OIDCSecret         string `yaml:"oidc.secret" env:"OG_OIDC_SECRET"`
+	OIDCDiscoveryUrl   string `yaml:"oidc.discovery-url" env:"OG_OIDC_DISCOVERY_URL"`
+	OIDCGroupClaimName string `yaml:"oidc.group-claim-name" env:"OG_OIDC_GROUP_CLAIM_NAME"`
+	OIDCAdminGroup     string `yaml:"oidc.admin-group" env:"OG_OIDC_ADMIN_GROUP"`
+
+	MetricsEnabled bool `yaml:"metrics.enabled" env:"OG_METRICS_ENABLED"`
 
 	CustomName    string       `yaml:"custom.name" env:"OG_CUSTOM_NAME"`
 	CustomLogo    string       `yaml:"custom.logo" env:"OG_CUSTOM_LOGO"`
@@ -91,8 +99,7 @@ func configWithDefaults() (*config, error) {
 	c.LogOutput = "stdout,file"
 	c.OpengistHome = ""
 	c.DBUri = "opengist.db"
-	c.IndexEnabled = true
-	c.IndexDirname = "opengist.index"
+	c.Index = "bleve"
 
 	c.SqliteJournalMode = "WAL"
 
@@ -109,6 +116,8 @@ func configWithDefaults() (*config, error) {
 
 	c.GiteaUrl = "https://gitea.com"
 	c.GiteaName = "Gitea"
+
+	c.MetricsEnabled = false
 
 	return c, nil
 }

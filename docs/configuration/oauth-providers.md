@@ -63,15 +63,32 @@ Opengist can be configured to use OAuth to authenticate users, with GitHub, Gite
 * Set 'Redirect URI' to `http://opengist.url/oauth/openid-connect/callback`
 * Copy the 'Client ID', 'Client Secret', and the discovery endpoint, and add them to the [configuration](cheat-sheet.md) :
   ```yaml
+  oidc.provider-name: <provider-name>
   oidc.client-key: <key>
   oidc.secret: <secret>
   # Discovery endpoint of the OpenID provider. Generally something like http://auth.example.com/.well-known/openid-configuration
   oidc.discovery-url: http://auth.example.com/.well-known/openid-configuration
   ```
   ```shell
+  OG_OIDC_PROVIDER_NAME=<provider-name>
   OG_OIDC_CLIENT_KEY=<key>
   OG_OIDC_SECRET=<secret>
   # Discovery endpoint of the OpenID provider. Generally something like http://auth.example.com/.well-known/openid-configuration
   OG_OIDC_DISCOVERY_URL=http://auth.example.com/.well-known/openid-configuration
   ```
-  
+
+### OIDC Admin Group
+
+OpenGist supports automatic admin privilege assignment based on OIDC group claims. To configure this feature:
+```yaml
+oidc.group-claim-name: groups        # Name of the claim containing the groups
+oidc.admin-group: admin-group-name   # Name of the group that should receive admin rights
+```
+```shell
+OG_OIDC_GROUP_CLAIM_NAME=groups
+OG_OIDC_ADMIN_GROUP=admin-group-name
+```
+
+The `group-claim-name` must match the name of the claim in your JWT token that contains the groups.
+
+Users who are members of the configured `admin-group` will automatically receive admin privileges in OpenGist. These privileges are synchronized on every login.
