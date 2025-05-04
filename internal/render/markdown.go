@@ -60,6 +60,7 @@ func newMarkdown(extraExtensions ...goldmark.Extender) goldmark.Markdown {
 			parser.WithASTTransformers(
 				util.Prioritized(&checkboxTransformer{}, 10000),
 			),
+			parser.WithAttribute(),
 		),
 	)
 }
