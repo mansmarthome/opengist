@@ -4,16 +4,6 @@ import (
 	gojson "encoding/json"
 	"errors"
 	"fmt"
-	"github.com/labstack/echo/v4"
-	"github.com/rs/zerolog/log"
-	"github.com/thomiceli/opengist/internal/config"
-	"github.com/thomiceli/opengist/internal/db"
-	"github.com/thomiceli/opengist/internal/git"
-	"github.com/thomiceli/opengist/internal/index"
-	"github.com/thomiceli/opengist/internal/web/context"
-	"github.com/thomiceli/opengist/internal/web/handlers"
-	"github.com/thomiceli/opengist/public"
-	"github.com/thomiceli/opengist/templates"
 	htmlpkg "html"
 	"html/template"
 	"io"
@@ -24,6 +14,17 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/dustin/go-humanize"
+	"github.com/labstack/echo/v4"
+	"github.com/rs/zerolog/log"
+	"github.com/thomiceli/opengist/internal/config"
+	"github.com/thomiceli/opengist/internal/db"
+	"github.com/thomiceli/opengist/internal/index"
+	"github.com/thomiceli/opengist/internal/web/context"
+	"github.com/thomiceli/opengist/internal/web/handlers"
+	"github.com/thomiceli/opengist/public"
+	"github.com/thomiceli/opengist/templates"
 )
 
 type Template struct {
@@ -58,23 +59,8 @@ func (s *Server) setFuncMap() {
 		"isMarkdown": func(i string) bool {
 			return strings.ToLower(filepath.Ext(i)) == ".md"
 		},
-		"isCsv": func(i string) bool {
-			return strings.ToLower(filepath.Ext(i)) == ".csv"
-		},
-		"isSvg": func(i string) bool {
-			return strings.ToLower(filepath.Ext(i)) == ".svg"
-		},
-		"csvFile": func(file *git.File) *git.CsvFile {
-			if strings.ToLower(filepath.Ext(file.Filename)) != ".csv" {
-				return nil
-			}
-
-			csvFile, err := git.ParseCsv(file)
-			if err != nil {
-				return nil
-			}
-
-			return csvFile
+		"isJupyter": func(i string) bool {
+			return strings.ToLower(filepath.Ext(i)) == ".ipynb"
 		},
 		"httpStatusText": http.StatusText,
 		"loadedTime": func(startTime time.Time) string {
@@ -185,6 +171,20 @@ func (s *Server) setFuncMap() {
 				str += topic.Topic
 			}
 			return str
+		},
+		"hexToRgb": func(hex string) string {
+			h, _ := strconv.ParseUint(strings.TrimPrefix(hex, "#"), 16, 32)
+			return fmt.Sprintf("%d, %d, %d,", (h>>16)&0xFF, (h>>8)&0xFF, h&0xFF)
+		},
+		"humanTimeDiff": func(t int64) string {
+			return humanize.Time(time.Unix(t, 0))
+		},
+		"humanTimeDiffStr": func(timestamp string) string {
+			t, _ := strconv.ParseInt(timestamp, 10, 64)
+			return humanize.Time(time.Unix(t, 0))
+		},
+		"humanDate": func(t int64) string {
+			return time.Unix(t, 0).Format("02/01/2006 15:04")
 		},
 	}
 

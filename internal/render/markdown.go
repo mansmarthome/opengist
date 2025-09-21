@@ -2,6 +2,8 @@ package render
 
 import (
 	"bytes"
+	"regexp"
+
 	"github.com/alecthomas/chroma/v2/formatters/html"
 	"github.com/thomiceli/opengist/internal/db"
 	"github.com/thomiceli/opengist/internal/git"
@@ -18,17 +20,19 @@ func MarkdownGistPreview(gist *db.Gist) (RenderedGist, error) {
 	var buf bytes.Buffer
 	err := newMarkdown().Convert([]byte(gist.Preview), &buf)
 
+	// remove links in Markdown Preview, quick fix for now
+	re := regexp.MustCompile(`<a\b[^>]*>(.*?)</a>`)
 	return RenderedGist{
 		Gist: gist,
-		HTML: buf.String(),
+		HTML: re.ReplaceAllString(buf.String(), `$1`),
 	}, err
 }
 
-func MarkdownFile(file *git.File) (RenderedFile, error) {
+func renderMarkdownFile(file *git.File) (HighlightedFile, error) {
 	var buf bytes.Buffer
 	err := newMarkdownWithSvgExtension().Convert([]byte(file.Content), &buf)
 
-	return RenderedFile{
+	return HighlightedFile{
 		File: file,
 		HTML: buf.String(),
 		Type: "Markdown",

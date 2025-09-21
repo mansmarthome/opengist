@@ -23,9 +23,12 @@ gist.header.download-zip: Download ZIP
 
 gist.raw: Raw
 gist.file-truncated: This file has been truncated.
+gist.file-raw: This file can't be rendered.
+gist.file-binary-edit: This file is binary.
 gist.watch-full-file: View the full file.
 gist.file-not-valid: This file is not a valid CSV file.
 gist.no-content: No files found
+gist.preview-non-available: Preview not available
 
 gist.new.new_gist: New gist
 gist.new.title: Title
@@ -46,6 +49,8 @@ gist.new.create-private-button: Create private gist
 gist.new.preview: Preview
 gist.new.create-a-new-gist: Create a new gist
 gist.new.topics: Topics (separate with spaces)
+gist.new.drop-files: Drop files here or click to upload
+gist.new.any-file-type: Upload any file type
 
 gist.edit.editing: Editing
 gist.edit.edit-gist: Edit %s
@@ -115,6 +120,7 @@ gist.revision.file-renamed: renamed to
 gist.revision.diff-truncated: Diff is too large to be shown
 gist.revision.file-renamed-no-changes: File renamed without changes
 gist.revision.empty-file: Empty file
+gist.revision.binary-file-changes: Binary file changes are not shown
 gist.revision.no-changes: No changes
 gist.revision.no-revisions: No revisions to show
 gist.revision-of: Revision of %s
@@ -148,6 +154,17 @@ settings.create-password-help: Create your password to login to Opengist via HTT
 settings.change-password: Change password
 settings.change-password-help: Change your password to login to Opengist via HTTP
 settings.password-label-title: Password
+settings.header.account: Account
+settings.header.mfa: MFA
+settings.header.ssh: SSH
+settings.header.style: Style
+settings.style.gist-code: Gist code
+settings.style.no-soft-wrap: No Soft Wrap
+settings.style.soft-wrap: Soft Wrap
+settings.style.removed-lines-color: Removed lines color
+settings.style.added-lines-color: Added lines color
+settings.style.git-lines-color: Git lines color
+settings.style.save-style: Save style
 
 auth.signup-disabled: Administrator has disabled signing up
 auth.login: Login
@@ -204,6 +221,8 @@ error.cannot-bind-data: Cannot bind data
 error.invalid-number: Invalid number
 error.invalid-character-unescaped: Invalid character unescaped
 error.not-in-mfa-session: User is not in a MFA session
+error.no-file-uploaded: No file uploaded
+error.cannot-open-file: Cannot open uploaded file
 
 header.menu.all: All
 header.menu.new: New

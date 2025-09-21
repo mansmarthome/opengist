@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"encoding/base64"
 	"fmt"
 	"io"
 	"net/url"
@@ -203,6 +202,11 @@ func CatFileBatch(user string, gist string, revision string, truncate bool) ([]*
 			return nil, err
 		}
 
+		// Don't truncate Jupyter notebooks
+		if strings.HasSuffix(file.Name, ".ipynb") {
+			truncate = false
+		}
+
 		sizeToRead := size
 		if truncate && sizeToRead > truncateLimit {
 			sizeToRead = truncateLimit
@@ -379,6 +383,17 @@ func SetFileContent(gistTmpId string, filename string, content string) error {
 	repositoryPath := TmpRepositoryPath(gistTmpId)
 
 	return os.WriteFile(filepath.Join(repositoryPath, filename), []byte(content), 0644)
+}
+
+func MoveFileToRepository(gistTmpId string, filename string, sourcePath string) error {
+	repositoryPath := TmpRepositoryPath(gistTmpId)
+	destPath := filepath.Join(repositoryPath, filename)
+
+	if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
+		return err
+	}
+
+	return os.Rename(sourcePath, destPath)
 }
 
 func AddAll(gistTmpId string) error {
@@ -565,50 +580,6 @@ func DeleteUserDirectory(user string) error {
 	return os.RemoveAll(filepath.Join(config.GetHomeDir(), ReposDirectory, user))
 }
 
-func SerialiseInitRepository(user string, serialized []byte) error {
-	userRepositoryPath := UserRepositoriesPath(user)
-	initPath := filepath.Join(userRepositoryPath, "_init")
-
-	f, err := os.OpenFile(initPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	encodedData := base64.StdEncoding.EncodeToString(serialized)
-	_, err = f.Write(append([]byte(encodedData), '\n'))
-	return err
-}
-
-func DeserialiseInitRepository(user string) ([]byte, error) {
-	initPath := filepath.Join(UserRepositoriesPath(user), "_init")
-
-	content, err := os.ReadFile(initPath)
-	if err != nil {
-		return nil, err
-	}
-
-	idx := bytes.Index(content, []byte{'\n'})
-	if idx == -1 {
-		return base64.StdEncoding.DecodeString(string(content))
-	}
-
-	firstLine := content[:idx]
-	remaining := content[idx+1:]
-
-	if len(remaining) == 0 {
-		if err := os.Remove(initPath); err != nil {
-			return nil, fmt.Errorf("failed to remove file: %v", err)
-		}
-	} else {
-		if err := os.WriteFile(initPath, remaining, 0644); err != nil {
-			return nil, fmt.Errorf("failed to write remaining content: %v", err)
-		}
-	}
-
-	return base64.StdEncoding.DecodeString(string(firstLine))
-}
-
 func createDotGitHookFile(repositoryPath string, hook string, content string) error {
 	preReceiveDst, err := os.OpenFile(filepath.Join(repositoryPath, "hooks", hook), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0744)
 	if err != nil {
@@ -672,7 +643,7 @@ func convertUTF8ToOctal(name string) string {
 }
 
 func convertURLToOctal(name string) string {
-	decoded, err := url.QueryUnescape(name)
+	decoded, err := url.PathUnescape(name)
 	if err != nil {
 		return name
 	}

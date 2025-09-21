@@ -2,7 +2,9 @@ package auth
 
 import (
 	"errors"
+
 	"github.com/rs/zerolog/log"
+	"github.com/thomiceli/opengist/internal/auth"
 	passwordpkg "github.com/thomiceli/opengist/internal/auth/password"
 	"github.com/thomiceli/opengist/internal/db"
 	"github.com/thomiceli/opengist/internal/i18n"
@@ -114,6 +116,7 @@ func ProcessLogin(ctx *context.Context) error {
 		return ctx.ErrorRes(403, ctx.Tr("error.login-disabled-form"), nil)
 	}
 
+	var user *db.User
 	var err error
 	sess := ctx.GetSession()
 
@@ -121,26 +124,16 @@ func ProcessLogin(ctx *context.Context) error {
 	if err = ctx.Bind(dto); err != nil {
 		return ctx.ErrorRes(400, ctx.Tr("error.cannot-bind-data"), err)
 	}
-	password := dto.Password
 
-	var user *db.User
-
-	if user, err = db.GetUserByUsername(dto.Username); err != nil {
-		if !errors.Is(err, gorm.ErrRecordNotFound) {
-			return ctx.ErrorRes(500, "Cannot get user", err)
+	user, err = auth.TryAuthentication(dto.Username, dto.Password)
+	if err != nil {
+		var authErr auth.AuthError
+		if errors.As(err, &authErr) {
+			log.Warn().Msg("Invalid HTTP authentication attempt from " + ctx.RealIP())
+			ctx.AddFlash(ctx.Tr("flash.auth.invalid-credentials"), "error")
+			return ctx.RedirectTo("/login")
 		}
-		log.Warn().Msg("Invalid HTTP authentication attempt from " + ctx.RealIP())
-		ctx.AddFlash(ctx.Tr("flash.auth.invalid-credentials"), "error")
-		return ctx.RedirectTo("/login")
-	}
-
-	if ok, err := passwordpkg.VerifyPassword(password, user.Password); !ok {
-		if err != nil {
-			return ctx.ErrorRes(500, "Cannot check for password", err)
-		}
-		log.Warn().Msg("Invalid HTTP authentication attempt from " + ctx.RealIP())
-		ctx.AddFlash(ctx.Tr("flash.auth.invalid-credentials"), "error")
-		return ctx.RedirectTo("/login")
+		return ctx.ErrorRes(500, "Authentication system error", nil)
 	}
 
 	// handle MFA

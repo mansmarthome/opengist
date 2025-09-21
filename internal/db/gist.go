@@ -1,8 +1,6 @@
 package db
 
 import (
-	"bytes"
-	"encoding/gob"
 	"fmt"
 	"os/exec"
 	"path/filepath"
@@ -420,12 +418,20 @@ func (gist *Gist) Files(revision string, truncate bool) ([]*git.File, error) {
 
 	var files []*git.File
 	for _, fileCat := range filesCat {
+		var shortContent string
+		if len(fileCat.Content) > 512 {
+			shortContent = fileCat.Content[:512]
+		} else {
+			shortContent = fileCat.Content
+		}
+
 		files = append(files, &git.File{
 			Filename:  fileCat.Name,
 			Size:      fileCat.Size,
 			HumanSize: humanize.IBytes(fileCat.Size),
 			Content:   fileCat.Content,
 			Truncated: fileCat.Truncated,
+			MimeType:  git.DetectMimeType([]byte(shortContent)),
 		})
 	}
 	return files, err
@@ -446,12 +452,20 @@ func (gist *Gist) File(revision string, filename string, truncate bool) (*git.Fi
 		return nil, err
 	}
 
+	var shortContent string
+	if len(content) > 512 {
+		shortContent = content[:512]
+	} else {
+		shortContent = content
+	}
+
 	return &git.File{
 		Filename:  filename,
 		Size:      size,
 		HumanSize: humanize.IBytes(size),
 		Content:   content,
 		Truncated: truncated,
+		MimeType:  git.DetectMimeType([]byte(shortContent)),
 	}, err
 }
 
@@ -473,8 +487,14 @@ func (gist *Gist) AddAndCommitFiles(files *[]FileDTO) error {
 	}
 
 	for _, file := range *files {
-		if err := git.SetFileContent(gist.Uuid, file.Filename, file.Content); err != nil {
-			return err
+		if file.SourcePath != "" { // if it's an uploaded file
+			if err := git.MoveFileToRepository(gist.Uuid, file.Filename, file.SourcePath); err != nil {
+				return err
+			}
+		} else { // else it's a text editor file
+			if err := git.SetFileContent(gist.Uuid, file.Filename, file.Content); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -532,19 +552,28 @@ func (gist *Gist) UpdatePreviewAndCount(withTimestampUpdate bool) error {
 		gist.Preview = ""
 		gist.PreviewFilename = ""
 	} else {
-		file, err := gist.File("HEAD", filesStr[0], true)
-		if err != nil {
-			return err
-		}
+		for _, fileStr := range filesStr {
+			file, err := gist.File("HEAD", fileStr, true)
+			if err != nil {
+				return err
+			}
+			if file == nil {
+				continue
+			}
+			gist.Preview = ""
+			gist.PreviewFilename = file.Filename
 
-		split := strings.Split(file.Content, "\n")
-		if len(split) > 10 {
-			gist.Preview = strings.Join(split[:10], "\n")
-		} else {
-			gist.Preview = file.Content
-		}
+			if !file.MimeType.CanBeEdited() {
+				continue
+			}
 
-		gist.PreviewFilename = file.Filename
+			split := strings.Split(file.Content, "\n")
+			if len(split) > 10 {
+				gist.Preview = strings.Join(split[:10], "\n")
+			} else {
+				gist.Preview = file.Content
+			}
+		}
 	}
 
 	if withTimestampUpdate {
@@ -613,30 +642,6 @@ func (gist *Gist) TopicsSlice() []string {
 	return topics
 }
 
-func (gist *Gist) SerialiseInitRepository() error {
-	var gobBuffer bytes.Buffer
-	encoder := gob.NewEncoder(&gobBuffer)
-	if err := encoder.Encode(gist); err != nil {
-		return fmt.Errorf("gob encoding error: %v", err)
-	}
-
-	return git.SerialiseInitRepository(gist.User.Username, gobBuffer.Bytes())
-}
-
-func DeserialiseInitRepository(user string) (*Gist, error) {
-	data, err := git.DeserialiseInitRepository(user)
-	if err != nil {
-		return nil, err
-	}
-
-	var gist Gist
-	decoder := gob.NewDecoder(bytes.NewReader(data))
-	if err := decoder.Decode(&gist); err != nil {
-		return nil, fmt.Errorf("gob decoding error: %v", err)
-	}
-	return &gist, nil
-}
-
 func (gist *Gist) UpdateLanguages() {
 	languages, err := gist.GetLanguagesFromFiles()
 	if err != nil {
@@ -686,10 +691,15 @@ func (gist *Gist) ToDTO() (*GistDTO, error) {
 
 	fileDTOs := make([]FileDTO, 0, len(files))
 	for _, file := range files {
-		fileDTOs = append(fileDTOs, FileDTO{
+		f := FileDTO{
 			Filename: file.Filename,
-			Content:  file.Content,
-		})
+		}
+		if file.MimeType.CanBeEdited() {
+			f.Content = file.Content
+		} else {
+			f.Binary = true
+		}
+		fileDTOs = append(fileDTOs, f)
 	}
 
 	return &GistDTO{
@@ -726,8 +736,10 @@ type VisibilityDTO struct {
 }
 
 type FileDTO struct {
-	Filename string `validate:"excludes=\x2f,excludes=\x5c,max=255"`
-	Content  string `validate:"required"`
+	Filename   string `validate:"excludes=\x2f,excludes=\x5c,max=255"`
+	Content    string
+	Binary     bool
+	SourcePath string // Path to uploaded file, used instead of Content when present
 }
 
 func (dto *GistDTO) ToGist() *Gist {

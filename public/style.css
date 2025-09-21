@@ -10,6 +10,12 @@
     }
 }
 
+:root {
+    --red-diff: rgba(255, 0, 0, .1);
+    --green-diff: rgba(0, 255, 128, .1);
+    --git-diff: rgba(143, 143, 143, 0.38);
+}
+
 html {
     @apply bg-gray-50 dark:bg-gray-800;
 }
@@ -33,18 +39,19 @@ pre {
 .code .line-num {
     width: 4%;
     text-align: right;
+    vertical-align: top;
 }
 
 .red-diff {
-    background-color: rgba(255, 0, 0, .1);
+    background-color: var(--red-diff);
 }
 
 .green-diff {
-    background-color: rgba(0, 255, 128, .1);
+    background-color: var(--green-diff);
 }
 
 .gray-diff {
-    background-color: rgba(143, 143, 143, 0.38);
+    background-color: var(--git-diff);
     @apply py-4 !important
 }
 
@@ -173,4 +180,18 @@ dl.dl-config dd {
 
 .hidden-important {
     @apply hidden !important;
+}
+
+/*
+ * A hack to ensure that Jupyter output images are always rendered with a
+ * neutral background color, even if the image itself does not have one, since
+ * Jupyter usually outputs images with transparent or light backgrounds.
+ */
+.dark .jupyter-output img {
+  background-color: #888;
+}
+
+
+.pdfobject-container {
+    @apply min-h-[700px] h-[700px] !important;
 }

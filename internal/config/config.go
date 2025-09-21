@@ -51,6 +51,8 @@ type config struct {
 	HttpPort string `yaml:"http.port" env:"OG_HTTP_PORT"`
 	HttpGit  bool   `yaml:"http.git-enabled" env:"OG_HTTP_GIT_ENABLED"`
 
+	UnixSocketPermissions string `yaml:"unix-socket-permissions" env:"OG_UNIX_SOCKET_PERMISSIONS"`
+
 	SshGit            bool   `yaml:"ssh.git-enabled" env:"OG_SSH_GIT_ENABLED"`
 	SshHost           string `yaml:"ssh.host" env:"OG_SSH_HOST"`
 	SshPort           string `yaml:"ssh.port" env:"OG_SSH_PORT"`
@@ -79,6 +81,12 @@ type config struct {
 
 	MetricsEnabled bool `yaml:"metrics.enabled" env:"OG_METRICS_ENABLED"`
 
+	LDAPUrl             string `yaml:"ldap.url" env:"OG_LDAP_URL"`
+	LDAPBindDn          string `yaml:"ldap.bind-dn" env:"OG_LDAP_BIND_DN"`
+	LDAPBindCredentials string `yaml:"ldap.bind-credentials" env:"OG_LDAP_BIND_CREDENTIALS"`
+	LDAPSearchBase      string `yaml:"ldap.search-base" env:"OG_LDAP_SEARCH_BASE"`
+	LDAPSearchFilter    string `yaml:"ldap.search-filter" env:"OG_LDAP_SEARCH_FILTER"`
+
 	CustomName    string       `yaml:"custom.name" env:"OG_CUSTOM_NAME"`
 	CustomLogo    string       `yaml:"custom.logo" env:"OG_CUSTOM_LOGO"`
 	CustomFavicon string       `yaml:"custom.favicon" env:"OG_CUSTOM_FAVICON"`
@@ -106,6 +114,8 @@ func configWithDefaults() (*config, error) {
 	c.HttpHost = "0.0.0.0"
 	c.HttpPort = "6157"
 	c.HttpGit = true
+
+	c.UnixSocketPermissions = "0666"
 
 	c.SshGit = true
 	c.SshHost = "0.0.0.0"
