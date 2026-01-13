@@ -150,6 +150,16 @@ func GetAllGists(offset int) ([]*Gist, error) {
 	return gists, err
 }
 
+func GetAllPublicGists() ([]*Gist, error) {
+	var gists []*Gist
+	err := db.Preload("User").
+		Where("gists.private = 0").
+		Order("id asc").
+		Find(&gists).Error
+
+	return gists, err
+}
+
 func GetAllGistsFromSearch(currentUserId uint, query string, offset int, sort string, order string, topic string) ([]*Gist, error) {
 	var gists []*Gist
 	tx := db.Preload("User").Preload("Forked.User").Preload("Topics").

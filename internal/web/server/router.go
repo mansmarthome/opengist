@@ -19,6 +19,7 @@ import (
 	"github.com/thomiceli/opengist/internal/web/handlers/health"
 	"github.com/thomiceli/opengist/internal/web/handlers/metrics"
 	"github.com/thomiceli/opengist/internal/web/handlers/settings"
+	"github.com/thomiceli/opengist/internal/web/handlers/sitemap"
 	"github.com/thomiceli/opengist/public"
 )
 
@@ -37,6 +38,8 @@ func (s *Server) registerRoutes() {
 		if config.C.MetricsEnabled {
 			r.GET("/metrics", metrics.Metrics)
 		}
+
+		r.GET("/sitemap.xml", sitemap.Sitemap)
 
 		r.GET("/register", auth.Register)
 		r.POST("/register", auth.ProcessRegister)
