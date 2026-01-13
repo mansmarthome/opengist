@@ -52,6 +52,10 @@
         <title>{{ if $.c.CustomName }}{{ $.c.CustomName }}{{ else }}Opengist{{ end }}</title>
     {{ end }}
 
+    {{ if and .gist (eq .page "code") (eq .revision "HEAD") }}
+        <meta name="description" content="{{ if .gist.Description }}{{ .gist.Description }}{{ else }}{{ .gist.Title }} от пользователя {{ .gist.User.Username }}{{ end }}" />
+    {{ end }}
+
     <link rel="canonical" href="{{ canonicalURL .requestURL }}" />
     {{ if .pagination }}
         {{ if .pagination.HasPrevious }}
