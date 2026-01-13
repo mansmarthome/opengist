@@ -41,6 +41,21 @@ func (s *Server) registerRoutes() {
 
 		r.GET("/sitemap.xml", sitemap.Sitemap)
 
+		r.GET("/favicon.ico", func(ctx *context.Context) error {
+			var target string
+			if config.C.CustomFavicon != "" {
+				target = "/assets/" + config.C.CustomFavicon
+			} else if s.dev {
+				// In dev mode, match the Vite dev server URL used by the asset func
+				target = "http://localhost:16157/favicon-32.png"
+			} else {
+				// In production, use the hashed filename from the manifest
+				target = "/" + context.ManifestEntries["favicon-32.png"].File
+			}
+
+			return ctx.Redirect(http.StatusTemporaryRedirect, target)
+		})
+
 		r.GET("/register", auth.Register)
 		r.POST("/register", auth.ProcessRegister)
 		r.GET("/login", auth.Login)
