@@ -157,6 +157,42 @@ func (s *Server) setFuncMap() {
 
 			return strings.TrimSpace(resultBuilder.String())
 		},
+		"canonicalURL": func(u *url.URL) string {
+			if u == nil {
+				return ""
+			}
+			originalQ := u.Query()
+
+			// Whitelist of known meaningful parameters
+			whitelist := map[string]bool{
+				"q":          true, // search query
+				"sort":       true,
+				"order":      true,
+				"title":      true,
+				"language":   true,
+				"visibility": true,
+				"topics":     true,
+			}
+
+				newQ := url.Values{}
+				for key := range originalQ {
+					if whitelist[key] {
+						value := originalQ.Get(key)
+						// Skip defaults for sort/order (they represent the same view as no params)
+						if (key == "sort" && value == "created") || (key == "order" && value == "desc") {
+							continue
+						}
+						newQ.Set(key, value)
+					}
+				}
+
+				path := u.Path
+				query := newQ.Encode()
+				if query != "" {
+					return config.C.ExternalUrl + path + "?" + query
+				}
+				return config.C.ExternalUrl + path
+		},
 		"indexEnabled": index.IndexEnabled,
 		"isUrl": func(s string) bool {
 			_, err := url.ParseRequestURI(s)

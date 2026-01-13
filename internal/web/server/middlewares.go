@@ -140,6 +140,7 @@ func dataInit(next Handler) Handler {
 		}
 
 		ctx.SetData("baseHttpUrl", baseHttpUrl)
+		ctx.SetData("requestURL", ctx.Request().URL)
 
 		return next(ctx)
 	}

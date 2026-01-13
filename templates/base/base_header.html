@@ -52,6 +52,16 @@
         <title>{{ if $.c.CustomName }}{{ $.c.CustomName }}{{ else }}Opengist{{ end }}</title>
     {{ end }}
 
+    <link rel="canonical" href="{{ canonicalURL .requestURL }}" />
+    {{ if .pagination }}
+        {{ if .pagination.HasPrevious }}
+            <link rel="prev" href="{{ $.c.ExternalUrl }}{{ .urlPage }}{{ .pagination.PreviousURL }}" />
+        {{ end }}
+        {{ if .pagination.HasNext }}
+            <link rel="next" href="{{ $.c.ExternalUrl }}{{ .urlPage }}{{ .pagination.NextURL }}" />
+        {{ end }}
+    {{ end }}
+
     {{ if .currentStyle }}
     <style>
         :root {
