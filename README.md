@@ -2,6 +2,10 @@
 
 <img height="108px" src="https://raw.githubusercontent.com/thomiceli/opengist/master/public/opengist.svg" alt="Opengist" align="right" />
 
+This is a customized fork of OpenGist with additional features:
+- **man smart-home customizations** - Tailored configurations and styling for the man smart-home blog.
+- **SEO optimizations** - Enhanced canonical URLs, meta descriptions, and sitemap.xml support.
+
 Opengist is a **self-hosted** Pastebin **powered by Git**. All snippets are stored in a Git repository and can be
 read and/or modified using standard Git commands, or with the web interface.
 It is similar to [GitHub Gist](https://gist.github.com/), but open-source and could be self-hosted.
@@ -30,6 +34,20 @@ It is similar to [GitHub Gist](https://gist.github.com/), but open-source and co
 * Restrict or unrestrict snippets visibility to anonymous users
 * Docker support / Helm Chart
 * [More...](/docs/introduction.md#features)
+
+## Customizations in This Fork
+
+This fork includes several custom enhancements:
+
+### SEO Optimizations
+
+- **Canonical URLs**: Proper canonical tags for better search engine indexing.
+- **Meta Descriptions**: Enhanced meta descriptions for improved search results.
+- **Sitemap.xml**: Automatic sitemap generation for search engine crawlers.
+
+### man smart-home Customizations
+
+- Custom styling and theming for the [man smart-home](https://mansmarthome.info/) blog.
 
 ## Quick start
 
@@ -107,7 +125,6 @@ To create and run a development environment, see [run-development.md](/docs/cont
 ## Documentation
 
 The documentation is available at [https://opengist.io/](https://opengist.io/) or in the [/docs](/docs) directory.
-
 
 ## License
 
