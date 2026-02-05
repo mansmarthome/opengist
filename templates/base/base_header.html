@@ -1,6 +1,6 @@
 {{ define "header" }}
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="{{ printf "%.2s" .locale.Code }}" class="h-full">
 <head>
     <meta charset="UTF-8" />
     {{ if .NoIndex }}
@@ -10,8 +10,8 @@
     <base href="{{ $.c.ExternalUrl }}" />
 
     <script>
-        window.opengist_base_url = "{{ $.c.ExternalUrl }}";
-        window.opengist_locale = "{{ .locale.Code }}".substring(0, 2);
+        window.opengist_base_url = '{{ $.c.ExternalUrl }}';
+        window.opengist_locale = '{{ printf "%.2s" .locale.Code }}';
         const checkTheme = () => {
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark')

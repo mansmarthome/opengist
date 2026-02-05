@@ -237,10 +237,9 @@ func locale(next Handler) Handler {
 			changeLang = false
 		}
 
-		// 3.Then check from 'Accept-Language' header.
+		// No parsing of Accept-Language needed for the fork. Default to ru-RU if no param or cookie.
 		if len(lang) == 0 {
-			tags, _, _ := language.ParseAcceptLanguage(ctx.Request().Header.Get("Accept-Language"))
-			lang = i18n.Locales.MatchTag(tags)
+			lang = "ru-RU"
 		}
 
 		if changeLang {
