@@ -55,7 +55,7 @@
             </a>
             <a href="{{ $.c.ExternalUrl }}/{{ $comment.User.Username }}" class="font-semibold hover:underline">{{ $comment.User.Username }}</a>
             {{ if eq $comment.UserID $.gist.UserID }}<span class="badge-outline">{{ $.locale.Tr "gist.comments.owner" }}</span>{{ end }}
-            <a href="{{ $.c.ExternalUrl }}/{{ $.gist.User.Username }}/{{ $.gist.Identifier }}/comments/{{ $comment.ID }}" hx-boost="false" class="text-muted-foreground hover:underline" title="{{ humanDate $comment.CreatedAt }}">{{ $.locale.Tr "gist.comments.commented" }} {{ $comment.CreatedAt | humanTimeDiff }}</a>
+            <a href="{{ $.c.ExternalUrl }}/{{ $.gist.User.Username }}/{{ $.gist.Identifier }}/comments/{{ $comment.ID }}" hx-boost="false" class="text-muted-foreground hover:underline" title="{{ humanDate $comment.CreatedAt }}">{{ $.locale.Tr "gist.comments.commented" }} {{ humanTimeDiff $.locale $comment.CreatedAt }}</a>
             {{ if $comment.IsEdited }}<span class="text-muted-foreground" title="{{ humanDate $comment.UpdatedAt }}">· {{ $.locale.Tr "gist.comments.edited" }}</span>{{ end }}
         </div>
 

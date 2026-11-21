@@ -22,7 +22,7 @@
 
             <div class="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
                 <span>
-                    {{ .locale.Tr "gist.list.last-active" }} {{ .gist.UpdatedAt | humanTimeDiff }}
+                    {{ .locale.Tr "gist.list.last-active" }} {{ humanTimeDiff $.locale .gist.UpdatedAt }}
                     {{ if .gist.Forked }} • {{ .locale.Tr "gist.list.forked-from" }}
                         <a href="{{ .c.ExternalUrl }}/{{ .gist.Forked.User.Username }}/{{ .gist.Forked.Identifier }}" class="hover:underline">{{ .gist.Forked.User.Username }}/{{ .gist.Forked.Title }}</a>
                     {{ end }}

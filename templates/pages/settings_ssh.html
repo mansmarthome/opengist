@@ -42,7 +42,7 @@
                         {{ if eq .LastUsedAt 0 }}
                         <p class="text-muted-foreground text-xs">{{ $.locale.Tr "settings.ssh-key-never-used" }}</p>
                         {{ else }}
-                        <p class="text-muted-foreground text-xs">{{ $.locale.Tr "settings.ssh-key-last-used" }} {{ .LastUsedAt | humanTimeDiff }}</p>
+                        <p class="text-muted-foreground text-xs">{{ $.locale.Tr "settings.ssh-key-last-used" }} {{ humanTimeDiff $.locale .LastUsedAt }}</p>
                         {{ end }}
                     </div>
                     <form action="{{ $.c.ExternalUrl }}/-/settings/ssh-keys/{{ .ID }}" method="post" class="shrink-0">

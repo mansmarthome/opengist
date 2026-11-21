@@ -16,7 +16,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dustin/go-humanize"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 	"github.com/thomiceli/opengist/internal/config"
@@ -227,12 +226,12 @@ func (s *Server) setFuncMap() {
 			h, _ := strconv.ParseUint(strings.TrimPrefix(hex, "#"), 16, 32)
 			return fmt.Sprintf("%d, %d, %d,", (h>>16)&0xFF, (h>>8)&0xFF, h&0xFF)
 		},
-		"humanTimeDiff": func(t int64) string {
-			return humanize.Time(time.Unix(t, 0))
+		"humanTimeDiff": func(locale any, t int64) string {
+			return relativeTime(locale, time.Unix(t, 0))
 		},
-		"humanTimeDiffStr": func(timestamp string) string {
+		"humanTimeDiffStr": func(locale any, timestamp string) string {
 			t, _ := strconv.ParseInt(timestamp, 10, 64)
-			return humanize.Time(time.Unix(t, 0))
+			return relativeTime(locale, time.Unix(t, 0))
 		},
 		"humanDate": func(t int64) string {
 			return time.Unix(t, 0).Format("02/01/2006 15:04")

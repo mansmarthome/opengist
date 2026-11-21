@@ -60,7 +60,7 @@
                                 {{ end }}
                                 <span class="flex flex-col">
                                     <span class="text-primary dark:text-violet-300 text-base font-medium hover:underline">{{ .Username }}</span>
-                                    <span class="text-muted-foreground text-xs">{{ $.locale.Tr "gist.list.joined" }} {{ .CreatedAt | humanTimeDiff }}</span>
+                                    <span class="text-muted-foreground text-xs">{{ $.locale.Tr "gist.list.joined" }} {{ humanTimeDiff $.locale .CreatedAt }}</span>
                                 </span>
                             </a>
                         </td>

@@ -15,7 +15,7 @@
                 {{ end }}
                 <div class="min-w-0">
                     <p class="truncate font-medium">{{ $gist.User.Username }}<span class="text-muted-foreground">/{{ $gist.Title }}</span></p>
-                    <p class="text-muted-foreground text-sm">{{ $.locale.Tr "gist.list.forked" }} {{ $gist.CreatedAt | humanTimeDiff }}</p>
+                    <p class="text-muted-foreground text-sm">{{ $.locale.Tr "gist.list.forked" }} {{ humanTimeDiff $.locale $gist.CreatedAt }}</p>
                 </div>
             </a>
             {{ end }}

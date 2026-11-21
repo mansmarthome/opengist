@@ -15,7 +15,7 @@
                         <svg class="size-5 rounded-full" data-jdenticon-value="{{ if $user }}{{ $user.Username }}{{ else }}{{ $commit.AuthorName }}{{ end }}" width="20" height="20"></svg>
                     {{ end }}
                     <span class="font-semibold">{{ if $user }}<a href="{{ $.c.ExternalUrl }}/{{ $user.Username }}" class="hover:underline">{{ $user.Username }}</a>{{ else }}{{ $commit.AuthorName }}{{ end }}</span>
-                    <span class="text-muted-foreground">{{ $.locale.Tr "gist.revision.revised" }} {{ $commit.Timestamp | humanTimeDiffStr }}</span>
+                    <span class="text-muted-foreground">{{ $.locale.Tr "gist.revision.revised" }} {{ humanTimeDiffStr $.locale $commit.Timestamp }}</span>
                     <span class="text-muted-foreground">·</span>
                     <a href="{{ $.c.ExternalUrl }}/{{ $.gist.User.Username }}/{{ $.gist.Identifier }}/rev/{{ $commit.Hash }}" class="text-primary font-mono hover:underline">{{ slice $commit.Hash 0 7 }}</a>
                 </h3>

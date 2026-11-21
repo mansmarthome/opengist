@@ -79,7 +79,7 @@
                         {{ if eq .LastUsedAt 0 }}
                         <p class="text-muted-foreground text-xs">{{ $.locale.Tr "settings.token-never-used" }}</p>
                         {{ else }}
-                        <p class="text-muted-foreground text-xs">{{ $.locale.Tr "settings.token-last-used" }} {{ .LastUsedAt | humanTimeDiff }}</p>
+                        <p class="text-muted-foreground text-xs">{{ $.locale.Tr "settings.token-last-used" }} {{ humanTimeDiff $.locale .LastUsedAt }}</p>
                         {{ end }}
                     </div>
                     <form action="{{ $.c.ExternalUrl }}/-/settings/access-tokens/{{ .ID }}" method="post" class="shrink-0">

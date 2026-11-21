@@ -15,7 +15,7 @@
                     <span class="text-muted-foreground">/</span>
                     <a href="{{ .c.ExternalUrl }}/{{ .gist.User.Username }}/{{ .gist.Identifier }}" class="font-semibold hover:underline">{{ .gist.Title }}</a>
                 </h1>
-                <p class="text-muted-foreground text-sm">{{ .locale.Tr "gist.header.last-active" }} {{ .gist.UpdatedAt | humanTimeDiff }}</p>
+                <p class="text-muted-foreground text-sm">{{ .locale.Tr "gist.header.last-active" }} {{ humanTimeDiff .locale .gist.UpdatedAt }}</p>
             </div>
         </div>
 
@@ -162,7 +162,7 @@
         {{ if .gist.Forked }}<span>{{ .locale.Tr "gist.header.forked-from" }} <a href="{{ .c.ExternalUrl }}/{{ .gist.Forked.User.Username }}/{{ .gist.Forked.Identifier }}" class="hover:underline">{{ .gist.Forked.User.Username }}/{{ .gist.Forked.Title }}</a></span>{{ end }}
         {{ if .gist.Private }}<span class="badge text-primary border-transparent bg-primary/10 dark:bg-violet-400/15 dark:text-violet-300">{{ visibilityStr .gist.Private false }}</span>{{ end }}
         {{ if .gist.Archived }}<span class="badge border-transparent bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">{{ .locale.Tr "gist.header.archived" }}</span>{{ end }}
-        {{ if .gist.ExpiresAt }}<span class="badge border-transparent bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300" title="{{ humanDate .gist.ExpiresAt }}">{{ .locale.Tr "gist.header.expires" }} {{ .gist.ExpiresAt | humanTimeDiff }}</span>{{ end }}
+        {{ if .gist.ExpiresAt }}<span class="badge border-transparent bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300" title="{{ humanDate .gist.ExpiresAt }}">{{ .locale.Tr "gist.header.expires" }} {{ humanTimeDiff .locale .gist.ExpiresAt }}</span>{{ end }}
     </div>
 
     {{ if .gist.Description }}<p class="text-sm break-words">{{ .gist.Description }}</p>{{ end }}
