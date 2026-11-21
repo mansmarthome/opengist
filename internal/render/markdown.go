@@ -133,7 +133,9 @@ func newMarkdownWithCodeBlockWrapper(wrapper highlighting.WrapperRenderer, extra
 	return goldmark.New(
 		goldmark.WithExtensions(extensions...),
 		goldmark.WithParserOptions(
+			parser.WithHeadingAttribute(),
 			parser.WithASTTransformers(
+				util.Prioritized(&headingIDTransformer{}, 500),
 				util.Prioritized(&checkboxTransformer{}, 10000),
 			),
 		),

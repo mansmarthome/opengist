@@ -81,6 +81,17 @@ func TestMarkdownCodeBlockCopyButton(t *testing.T) {
 
 // htmx and _hyperscript act on attributes of the markup they process, so
 // rendered Markdown must not let the source set any of them.
+func TestMarkdownHeadingID(t *testing.T) {
+	output, err := MarkdownString("### Особые указания {id=dnsdist-16}\n")
+	require.NoError(t, err)
+	require.Contains(t, output, `<h3 id="dnsdist-16">`)
+	require.NotContains(t, output, "{id=dnsdist-16}")
+
+	output, err = MarkdownString("### Shorthand {#dnsdist-16}\n")
+	require.NoError(t, err)
+	require.Contains(t, output, `<h3 id="dnsdist-16">`)
+}
+
 func TestMarkdownNoUserAttributes(t *testing.T) {
 	source := `<div _="on load log 1" script="on load log 1" data-script="on load log 1" hx-get="/" data-hx-get="/">block</div>
 
