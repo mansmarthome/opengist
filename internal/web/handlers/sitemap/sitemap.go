@@ -19,12 +19,13 @@ func Sitemap(ctx *context.Context) error {
 	sb.WriteString(`<?xml version="1.0" encoding="UTF-8"?>`)
 	sb.WriteString(`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`)
 
-	// Add static pages
-	addURL(&sb, ctx.GetData("baseHttpUrl").(string)+"/-/all", time.Now(), "weekly", "0.8")
+	base := ctx.GetData("baseHttpUrl").(string)
 
-	// Add public gists
+	// Listing lastmod is the newest public gist, not the time the sitemap was fetched.
+	addURL(&sb, base+"/-/all", newestPublicGistUpdate(gists), "weekly", "0.8")
+
 	for _, gist := range gists {
-		url := ctx.GetData("baseHttpUrl").(string) + "/" + gist.User.Username + "/" + gist.Identifier()
+		url := base + "/" + gist.User.Username + "/" + gist.Identifier()
 		addURL(&sb, url, time.Unix(gist.UpdatedAt, 0), "monthly", "1.0")
 	}
 
@@ -34,11 +35,25 @@ func Sitemap(ctx *context.Context) error {
 	return ctx.PlainText(200, sb.String())
 }
 
+func newestPublicGistUpdate(gists []*db.Gist) time.Time {
+	var latest time.Time
+	for _, gist := range gists {
+		if gist == nil || gist.UpdatedAt == 0 {
+			continue
+		}
+		updated := time.Unix(gist.UpdatedAt, 0).UTC()
+		if updated.After(latest) {
+			latest = updated
+		}
+	}
+	return latest
+}
+
 func addURL(sb *strings.Builder, loc string, lastmod time.Time, changefreq string, priority string) {
 	sb.WriteString("<url>")
 	sb.WriteString("<loc>" + template.HTMLEscapeString(loc) + "</loc>")
 	if !lastmod.IsZero() {
-		sb.WriteString("<lastmod>" + lastmod.Format("2006-01-02T15:04:05Z") + "</lastmod>")
+		sb.WriteString("<lastmod>" + lastmod.UTC().Format(time.RFC3339) + "</lastmod>")
 	}
 	sb.WriteString("<changefreq>" + changefreq + "</changefreq>")
 	sb.WriteString("<priority>" + priority + "</priority>")

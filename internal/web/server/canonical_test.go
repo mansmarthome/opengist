@@ -27,6 +27,9 @@ func TestCanonicalURL(t *testing.T) {
 		{"keeps non-default sort", "/-/all?sort=updated&order=desc", base + "/-/all?sort=updated"},
 		{"keeps search query", "/-/search?q=homelab&page=3", base + "/-/search?q=homelab"},
 		{"drops unknown params", "/roland/abc?utm_source=x&fbclid=1", base + "/roland/abc"},
+		{"drops empty filters", "/-/all?title=&visibility=&language=&topics=&sort=created&order=desc", base + "/-/all"},
+		{"drops users defaults", "/-/users?sort=username&order=asc&page=2", base + "/-/users"},
+		{"keeps users non-default sort", "/-/users?sort=joined&order=desc", base + "/-/users?order=desc&sort=joined"},
 	}
 
 	for _, tt := range tests {

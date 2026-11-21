@@ -314,8 +314,10 @@ func parseManifest(files fs.FS) (map[string]context.Asset, error) {
 	return entries, nil
 }
 
-// canonicalURL builds the fork canonical URL. page is omitted, and default
-// sort/order values are dropped so they collapse to the unparameterized URL.
+// canonicalURL builds the fork canonical URL. page is omitted, empty filter
+// values are dropped, and the page's default sort/order are dropped so they
+// collapse to the unparameterized URL. Gist lists default to created/desc;
+// the users list defaults to username/asc.
 func canonicalURL(base string, u *url.URL) string {
 	if u == nil {
 		return ""
@@ -331,6 +333,11 @@ func canonicalURL(base string, u *url.URL) string {
 		"topics":     true,
 	}
 
+	defaultSort, defaultOrder := "created", "desc"
+	if strings.TrimRight(u.Path, "/") == "/-/users" {
+		defaultSort, defaultOrder = "username", "asc"
+	}
+
 	originalQ := u.Query()
 	newQ := url.Values{}
 	for key := range originalQ {
@@ -338,7 +345,10 @@ func canonicalURL(base string, u *url.URL) string {
 			continue
 		}
 		value := originalQ.Get(key)
-		if (key == "sort" && value == "created") || (key == "order" && value == "desc") {
+		if strings.TrimSpace(value) == "" {
+			continue
+		}
+		if (key == "sort" && value == defaultSort) || (key == "order" && value == defaultOrder) {
 			continue
 		}
 		newQ.Set(key, value)
