@@ -52,7 +52,7 @@ gist.edit.save: Сохранить
 gist.list.joined: Зарегистрирован
 gist.list.all: Все фрагменты
 gist.list.recently-liked: Недавно понравившиеся
-gist.list.recently-forked: Недавно ответвлённые
+gist.list.recently-forked: Недавно форкнутые
 gist.list.search-results: Результаты поиска
 gist.list.sort: Сортировка
 gist.list.sort-by-created: созданные
@@ -61,14 +61,14 @@ gist.list.order-by-asc: Давно
 gist.list.order-by-desc: Недавно
 gist.list.select-tab: Перейти
 gist.list.liked: Понравившиеся
-gist.list.likes: лайк(-ов)
+gist.list.likes: Лайки
 gist.list.forked: Форки
 gist.list.forked-from: Форки с
-gist.list.forks: форк(-ов)
-gist.list.files: файл(-ов)
+gist.list.forks: Форки
+gist.list.files: Файлы
 gist.list.last-active: Последняя активность
 gist.list.no-gists: Нет фрагментов
-gist.list.topics: Темы
+gist.list.topics: Теги
 gist.list.users: Пользователи
 
 gist.forks: Форки
@@ -126,8 +126,10 @@ error: Ошибка
 header.menu.all: Все
 header.menu.explore: Обзор
 header.menu.new: Новый
-header.menu.topics: Темы
+header.menu.topics: Теги
 header.menu.users: Пользователи
+header.menu.back-to-blog: Назад в блог
+header.menu.contacts: Контакты
 header.menu.search: Поиск
 header.menu.my-gists: Мои фрагменты
 header.menu.liked: Понравившиеся
@@ -140,6 +142,7 @@ header.menu.light: Светлая
 header.menu.dark: Тёмная
 header.menu.system: Системная
 footer.powered-by: Работает на %s
+footer.hosted-on: Хостится на %s
 sidebar.collapse: Свернуть
 
 pagination.older: Позже
@@ -186,7 +189,7 @@ gist.new.preview: 'Предпросмотр'
 gist.new.create-a-new-gist: 'Создать новый фрагмент'
 gist.edit.edit-gist: 'Редактировать %s'
 gist.list.all-liked-by: 'Все фрагменты, понравившиеся %s'
-gist.list.all-forked-by: 'Все фрагменты, ответвлённые %s'
+gist.list.all-forked-by: 'Все фрагменты, форкнутые %s'
 gist.list.all-from: 'Все фрагменты от %s'
 gist.search.found: 'фрагментов найдено'
 gist.search.no-results: 'Фрагменты не найдены'
@@ -261,9 +264,9 @@ settings.ssh-key-exists: SSH-ключ уже существует
 gist.file-binary-edit: Этот файл является бинарным.
 gist.preview-non-available: Предпросмотр недоступен
 gist.file-raw: Не удалось отобразить файл.
-gist.new.topics: Темы (через пробел)
-gist.list.topic-results-topic: Все фрагменты с темой %s
-gist.search.help.topic: фрагменты с заданной темой
+gist.new.topics: Теги (через пробел)
+gist.list.topic-results-topic: Все фрагменты с тегом %s
+gist.search.help.topic: фрагменты с заданным тегом
 gist.search.placeholder.title: Заголовок
 gist.search.placeholder.visibility: Видимость
 gist.search.placeholder.public: Публичный
@@ -271,18 +274,18 @@ gist.search.placeholder.unlisted: Скрытый
 gist.search.placeholder.private: Приватный
 gist.search.placeholder.language: Язык
 gist.search.placeholder.all: Все
-gist.search.placeholder.topics: Темы
+gist.search.placeholder.topics: Теги
 gist.search.placeholder.search: Поиск
 gist.new.drop-files: Перетащите файлы сюда или нажмите для загрузки
 gist.new.any-file-type: Поддерживаются файлы любого типа
 gist.delete.confirm: Вы уверены, что хотите удалить этот gist?
-gist.list.topic-results: Все фрагменты с этой темой
+gist.list.topic-results: Все фрагменты с этим тегом
 gist.revision.binary-file-changes: Изменения в бинарных файлах не отображаются
 admin.actions.sync-gist-languages: Обновить языки всех фрагментов
 admin.invitations.delete_confirm: Вы хотите удалить это приглашение?
 flash.auth.passkey-deleted: Ключ доступа удалён
 flash.auth.passkey-registred: Ключ доступа %s зарегистрирован
-validation.invalid-gist-topics: 'Некорректные темы фрагмента: они должны начинаться с буквы или цифры, быть не длиннее 50 символов и могут содержать дефисы'
+validation.invalid-gist-topics: 'Некорректные теги фрагмента: они должны начинаться с буквы или цифры, быть не длиннее 50 символов и могут содержать дефисы'
 settings.header.tokens: Токены доступа
 settings.style.removed-lines-color: Цвет удалённых строк
 settings.style.added-lines-color: Цвет добавленных строк
@@ -354,3 +357,104 @@ settings.header.style: Тема оформления
 settings.style.gist-code: Код фрагмента
 settings.style.no-soft-wrap: Без переносов строк
 settings.style.soft-wrap: Перенос строк
+
+gist.header.edit-files: Редактировать файлы
+gist.header.archive: В архив
+gist.header.unarchive: Из архива
+gist.header.archived: В архиве
+gist.header.archived-help: Этот фрагмент в архиве и доступен только для чтения.
+gist.header.expires: Истекает
+gist.header.more-actions: Ещё
+gist.files-truncated: Показаны не все файлы этого фрагмента. Склонируйте или скачайте его, чтобы увидеть остальные.
+gist.embed.view-all-files: Все файлы
+gist.new.expire: Срок
+gist.new.expire-never: Никогда
+gist.new.expire-1hour: Через 1 час
+gist.new.expire-12hours: Через 12 часов
+gist.new.expire-1day: Через 1 день
+gist.new.expire-7days: Через 7 дней
+gist.new.expire-15days: Через 15 дней
+gist.new.expire-custom: Своя дата
+gist.settings.visibility-help: Кто может видеть и находить этот фрагмент.
+gist.settings.archive-help: Архивные фрагменты доступны только для чтения. Архивацию можно отменить в любой момент.
+gist.settings.danger-zone: Опасная зона
+gist.settings.delete-gist: Удалить фрагмент
+gist.settings.delete-help: После удаления фрагмент и все его версии исчезнут безвозвратно.
+gist.comments: Комментарии
+gist.comments.comment: Комментарий
+gist.comments.commented: прокомментировал
+gist.comments.edited: изменено
+gist.comments.owner: Автор
+gist.comments.edit: Изменить комментарий
+gist.comments.delete: Удалить комментарий
+gist.comments.delete-confirm: Удалить этот комментарий?
+gist.comments.placeholder: Написать комментарий
+gist.comments.markdown-help: Поддерживается Markdown.
+gist.comments.login: Войдите, чтобы оставить комментарий
+gist.comments.archived: Фрагмент в архиве, новые комментарии недоступны.
+gist.comments.view-more: Ещё комментарии
+gist.comments.no: Комментариев пока нет
+gist.comments.for: Комментарии к %s
+gist.list.search-for: Результаты по запросу
+gist.list.comments: Комментарии
+gist.list.no-topics: Нет тегов
+gist.list.topic: Тег
+gist.list.gists: Фрагменты
+explore.users.no-users: Нет пользователей
+explore.users.search-placeholder: Поиск пользователей
+explore.users.sort-username-asc: Имя (А → Я)
+explore.users.sort-username-desc: Имя (Я → А)
+explore.users.sort-joined-desc: Сначала новые
+explore.users.sort-joined-asc: Сначала старые
+gist.search.help.description: фрагменты с заданным описанием
+gist.search.help.all: искать по всем полям
+settings.avatar: Аватар
+settings.avatar-help: Загрузите свой аватар вместо Gravatar
+settings.avatar-remove: Удалить аватар
+settings.header.authentication: Аутентификация
+settings.style.default-sort: Сортировка по умолчанию
+settings.style.default-sort-created: Дата создания
+settings.style.default-sort-updated: Дата изменения
+settings.style.default-order: Порядок по умолчанию
+settings.style.default-order-desc: Сначала новые
+settings.style.default-order-asc: Сначала старые
+settings.token-user-permission: Пользователь
+settings.api-disabled-warning: REST API сейчас отключён. Созданные здесь токены заработают, когда администратор включит API.
+settings.api-disabled-go-admin: Открыть настройки администратора
+auth.oauth.no-provider: Провайдер OAuth не найден
+auth.oauth.complete-registration: Завершите регистрацию
+auth.oauth.complete-registration-button: Создать аккаунт
+auth.oauth.signing-in-with: Вход через %s
+auth.oauth.cancel: Отмена
+auth.oauth.existing-account: Уже есть аккаунт?
+auth.oauth.already-have-account: Если аккаунт Opengist уже есть, сначала войдите и привяжите аккаунт %s в настройках.
+error.go-home: На главную
+error.git-mfa-use-token: Для этого аккаунта включена многофакторная аутентификация. Используйте токен доступа вместо пароля.
+error.file-upload-disabled: Загрузка файлов отключена
+error.gist-form-too-large: Форма фрагмента превышает лимит запроса в 10 МБ
+error.comments-disabled: Комментарии отключены
+header.menu.recently-liked: Недавно понравившиеся
+header.menu.recently-forked: Недавно форкнутые
+ui.feedback-new: Оставить отзыв о новом интерфейсе
+admin.actions.subtitle: Ручной запуск задач обслуживания. Некоторые задачи также выполняются по расписанию.
+admin.actions.run: Запустить
+admin.actions.running: Выполняется
+admin.actions.sync-fs: Удалить фрагменты без репозитория на диске
+admin.actions.sync-db: Удалить репозитории без фрагмента в базе
+admin.actions.delete-expired-gists: Удалить истёкшие фрагменты
+admin.actions.sync-ssh-keys: Пересоздать файл authorized_keys
+admin.api-enabled: Включить REST API по адресу /api
+admin.api-enabled_help: Разрешить программный доступ к фрагментам и данным пользователя через персональные токены.
+flash.auth.oauth-session-expired: Сессия OAuth2 истекла, попробуйте ещё раз
+flash.auth.oauth-already-linked: Этот аккаунт %s уже привязан к другому пользователю
+flash.auth.oauth-unlink-only-login-method: "Нельзя отвязать этот аккаунт: это единственный способ входа"
+flash.gist.archived: Фрагмент архивирован
+flash.gist.unarchived: Фрагмент извлечён из архива
+flash.gist.updated: Фрагмент обновлён
+flash.gist.comment-deleted: Комментарий удалён
+flash.user.avatar-updated: Аватар обновлён
+flash.user.avatar-deleted: Аватар удалён
+flash.user.avatar-invalid: Некорректный файл изображения. Допустимы PNG, JPEG, GIF и WebP
+flash.user.avatar-too-large: Файл изображения слишком большой, максимум 5 МБ
+validation.should-only-contain-alphanumeric-characters-and-dashes-and-underscores: Поле %s должно содержать только буквы, цифры, дефисы и подчёркивания
+validation.invalid-expiration-date: "Некорректная дата истечения: укажите будущую дату"

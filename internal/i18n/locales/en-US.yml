@@ -336,6 +336,8 @@ header.menu.explore: Explore
 header.menu.new: New
 header.menu.topics: Topics
 header.menu.users: Users
+header.menu.back-to-blog: Back to blog
+header.menu.contacts: Contacts
 header.menu.search: Search
 header.menu.recently-liked: Recently liked
 header.menu.recently-forked: Recently forked
@@ -350,6 +352,7 @@ header.menu.light: Light
 header.menu.dark: Dark
 header.menu.system: System
 footer.powered-by: Powered by %s
+footer.hosted-on: Hosted on %s
 ui.feedback-new: Give feedback on the new UI
 sidebar.collapse: Collapse
 
