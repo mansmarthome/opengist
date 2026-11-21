@@ -1,6 +1,5 @@
 {{ define "_analytics" }}
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript" >
+<script nonce="{{ .cspNonce }}">
    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
    m[i].l=1*new Date();
    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
@@ -12,7 +11,12 @@
         trackLinks:true,
         accurateTrackBounce:true
    });
+   if (!window.__ogMetrika) {
+        window.__ogMetrika = true;
+        document.addEventListener('htmx:afterSettle', function () {
+            if (window.ym) ym(100037346, 'hit', window.location.href);
+        });
+   }
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/100037346" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
 {{ end }}

@@ -1,6 +1,6 @@
 # Opengist
 
-<img height="108px" src="https://raw.githubusercontent.com/thomiceli/opengist/master/public/opengist.svg" alt="Opengist" align="right" />
+<img height="108px" src="https://raw.githubusercontent.com/thomiceli/opengist/master/public/img/opengist.svg" alt="Opengist" align="right" />
 
 This is a customized fork of OpenGist with additional features:
 - **man smart-home customizations** - Tailored configurations and styling for the man smart-home blog.
@@ -47,7 +47,8 @@ This fork includes several custom enhancements:
 
 ### man smart-home Customizations
 
-- Custom styling and theming for the [man smart-home](https://mansmarthome.info/) blog.
+- Custom styling lives in `public/css/mansmarthome.css` (theme color, square corners, markdown links). Upstream templates are otherwise kept as-is.
+- Waline comments, Yandex.Metrika, Russian-by-default locale, and the sidebar links to the blog.
 
 ## Quick start
 
@@ -56,7 +57,7 @@ This fork includes several custom enhancements:
 Docker [images](https://github.com/thomiceli/opengist/pkgs/container/opengist) are available for each release :
 
 ```shell
-docker pull ghcr.io/thomiceli/opengist:1.11
+docker pull ghcr.io/thomiceli/opengist:1.16.0
 ```
 
 It can be used in a `docker-compose.yml` file :
@@ -68,7 +69,7 @@ It can be used in a `docker-compose.yml` file :
 ```yml
 services:
   opengist:
-    image: ghcr.io/thomiceli/opengist:1.11
+    image: ghcr.io/thomiceli/opengist:1.16.0
     container_name: opengist
     restart: unless-stopped
     ports:
@@ -95,9 +96,9 @@ Download the archive for your system from the release page [here](https://github
 
 ```shell
 # example for linux amd64
-wget https://github.com/thomiceli/opengist/releases/download/v1.11.1/opengist1.11.1-linux-amd64.tar.gz
+wget https://github.com/thomiceli/opengist/releases/download/v1.16.0/opengist1.16.0-linux-amd64.tar.gz
 
-tar xzvf opengist1.11.1-linux-amd64.tar.gz
+tar xzvf opengist1.16.0-linux-amd64.tar.gz
 cd opengist
 chmod +x opengist
 ./opengist # with or without `--config config.yml`

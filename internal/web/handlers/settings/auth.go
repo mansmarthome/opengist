@@ -13,12 +13,12 @@ func PasskeyDelete(ctx *context.Context) error {
 	user := ctx.User
 	keyId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.RedirectTo("/settings")
+		return ctx.RedirectTo("/-/settings")
 	}
 
 	passkey, err := db.GetCredentialByIDDB(uint(keyId))
 	if err != nil || passkey.UserID != user.ID {
-		return ctx.RedirectTo("/settings")
+		return ctx.RedirectTo("/-/settings")
 	}
 
 	if err := passkey.Delete(); err != nil {
@@ -26,7 +26,7 @@ func PasskeyDelete(ctx *context.Context) error {
 	}
 
 	ctx.AddFlash(ctx.Tr("flash.auth.passkey-deleted"), "success")
-	return ctx.RedirectTo("/settings")
+	return ctx.RedirectTo("/-/settings")
 }
 
 func PasswordProcess(ctx *context.Context) error {
@@ -40,7 +40,10 @@ func PasswordProcess(ctx *context.Context) error {
 
 	if err := ctx.Validate(dto); err != nil {
 		ctx.AddFlash(validator.ValidationMessages(&err, ctx.GetData("locale").(*i18n.Locale)), "error")
-		return ctx.Html("settings.html")
+		if ctx.FormValue("_legacy_account") == "1" {
+			return ctx.RedirectTo("/-/settings")
+		}
+		return ctx.RedirectTo("/-/settings/authentication")
 	}
 
 	password, err := passwordpkg.HashPassword(dto.Password)
@@ -48,11 +51,20 @@ func PasswordProcess(ctx *context.Context) error {
 		return ctx.ErrorRes(500, "Cannot hash password", err)
 	}
 	user.Password = password
+	// log out the sessions opened before the password change
+	user.SessionVersion++
 
 	if err = user.Update(); err != nil {
 		return ctx.ErrorRes(500, "Cannot update password", err)
 	}
 
+	// keep the current session logged in, under a new session ID so that a copy
+	// of its previous cookie is logged out too
+	sess := ctx.GetSession()
+	sess.ID = ""
+	sess.Values["sessionVersion"] = user.SessionVersion
+	ctx.SaveSession(sess)
+
 	ctx.AddFlash(ctx.Tr("flash.user.password-updated"), "success")
-	return ctx.RedirectTo("/settings")
+	return ctx.RedirectTo("/-/settings")
 }

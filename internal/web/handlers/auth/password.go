@@ -23,6 +23,9 @@ func Register(ctx *context.Context) error {
 			return ctx.ErrorRes(500, "Cannot check for invitation code", err)
 		} else if invitation != nil && invitation.IsUsable() {
 			disableSignup = false
+			sess := ctx.GetSession()
+			sess.Values[oauthInvitationSessionKey] = invitation.ID
+			ctx.SaveSession(sess)
 		}
 	}
 
@@ -98,6 +101,7 @@ func ProcessRegister(ctx *context.Context) error {
 	}
 
 	sess.Values["user"] = user.ID
+	sess.Values["sessionVersion"] = user.SessionVersion
 	ctx.SaveSession(sess)
 
 	return ctx.RedirectTo("/")
@@ -131,7 +135,7 @@ func ProcessLogin(ctx *context.Context) error {
 		if errors.As(err, &authErr) {
 			log.Warn().Msg("Invalid HTTP authentication attempt from " + ctx.RealIP())
 			ctx.AddFlash(ctx.Tr("flash.auth.invalid-credentials"), "error")
-			return ctx.RedirectTo("/login")
+			return ctx.RedirectTo("/-/login")
 		}
 		return ctx.ErrorRes(500, "Authentication system error", nil)
 	}
@@ -149,6 +153,7 @@ func ProcessLogin(ctx *context.Context) error {
 	}
 
 	sess.Values["user"] = user.ID
+	sess.Values["sessionVersion"] = user.SessionVersion
 	sess.Options.MaxAge = 60 * 60 * 24 * 365 // 1 year
 	ctx.SaveSession(sess)
 	ctx.DeleteCsrfCookie()
@@ -159,5 +164,5 @@ func ProcessLogin(ctx *context.Context) error {
 func Logout(ctx *context.Context) error {
 	ctx.DeleteSession()
 	ctx.DeleteCsrfCookie()
-	return ctx.RedirectTo("/all")
+	return ctx.RedirectTo("/-/all")
 }

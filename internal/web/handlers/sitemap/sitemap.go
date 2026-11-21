@@ -20,7 +20,7 @@ func Sitemap(ctx *context.Context) error {
 	sb.WriteString(`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`)
 
 	// Add static pages
-	addURL(&sb, ctx.GetData("baseHttpUrl").(string)+"/all", time.Now(), "weekly", "0.8")
+	addURL(&sb, ctx.GetData("baseHttpUrl").(string)+"/-/all", time.Now(), "weekly", "0.8")
 
 	// Add public gists
 	for _, gist := range gists {
@@ -43,4 +43,4 @@ func addURL(sb *strings.Builder, loc string, lastmod time.Time, changefreq strin
 	sb.WriteString("<changefreq>" + changefreq + "</changefreq>")
 	sb.WriteString("<priority>" + priority + "</priority>")
 	sb.WriteString("</url>")
- }
+}

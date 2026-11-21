@@ -10,8 +10,28 @@ func Enabled() bool {
 	return config.C.LDAPUrl != ""
 }
 
+// bindService binds the connection as the configured service account, or anonymously
+// when no bind DN is configured, for LDAP servers allowing anonymous queries.
+func bindService(l *ldap.Conn) error {
+	if config.C.LDAPBindDn == "" {
+		return l.UnauthenticatedBind("")
+	}
+	return l.Bind(config.C.LDAPBindDn, config.C.LDAPBindCredentials)
+}
+
+// searchFilter returns the configured search filter for the username, escaped so
+// that it is matched as a literal value.
+func searchFilter(username string) string {
+	return fmt.Sprintf(config.C.LDAPSearchFilter, ldap.EscapeFilter(username))
+}
+
 // Authenticate attempts to authenticate a user against the configured LDAP instance.
 func Authenticate(username, password string) (bool, error) {
+	// A bind with an empty password is an unauthenticated bind, which some servers accept
+	if password == "" {
+		return false, nil
+	}
+
 	l, err := ldap.DialURL(config.C.LDAPUrl)
 	if err != nil {
 		return false, fmt.Errorf("unable to connect to URI: %v", config.C.LDAPUrl)
@@ -21,12 +41,11 @@ func Authenticate(username, password string) (bool, error) {
 	}(l)
 
 	// First bind with a read only user
-	err = l.Bind(config.C.LDAPBindDn, config.C.LDAPBindCredentials)
+	err = bindService(l)
 	if err != nil {
 		return false, err
 	}
 
-	searchFilter := fmt.Sprintf(config.C.LDAPSearchFilter, username)
 	searchRequest := ldap.NewSearchRequest(
 		config.C.LDAPSearchBase,
 		ldap.ScopeWholeSubtree,
@@ -34,7 +53,7 @@ func Authenticate(username, password string) (bool, error) {
 		0,
 		0,
 		false,
-		searchFilter,
+		searchFilter(username),
 		[]string{"dn"},
 		nil,
 	)
@@ -55,7 +74,7 @@ func Authenticate(username, password string) (bool, error) {
 	}
 
 	// Rebind as the read only user for any further queries
-	err = l.Bind(config.C.LDAPBindDn, config.C.LDAPBindCredentials)
+	err = bindService(l)
 	if err != nil {
 		return false, err
 	}

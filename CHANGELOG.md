@@ -1,5 +1,244 @@
 # Changelog
 
+## [1.16.0](https://github.com/thomiceli/opengist/compare/v1.15.3...v1.16.0) - 2026-11-21
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### ⚠️ Security release ⚠️
+This release fixes 13 security vulnerabilities, please update as soon as possible. Check the breaking changes and the steps after updating below.
+
+### Added
+- Gist comments (#855)
+
+### Security
+- Unauthenticated writes to gists over Git HTTP ([GHSA-9mjv-vm4v-484w](https://github.com/thomiceli/opengist/security/advisories/GHSA-9mjv-vm4v-484w))
+- LDAP filter injection, and LDAP usernames used unchecked as directory names ([GHSA-883q-jwxx-r7hv](https://github.com/thomiceli/opengist/security/advisories/GHSA-883q-jwxx-r7hv))
+- Stored XSS through data attributes in Jupyter notebooks ([GHSA-72x9-42q6-qv57](https://github.com/thomiceli/opengist/security/advisories/GHSA-72x9-42q6-qv57))
+- CPU exhaustion through the `Accept-Language` header ([GHSA-q3qv-c8qq-94mj](https://github.com/thomiceli/opengist/security/advisories/GHSA-q3qv-c8qq-94mj))
+- MFA bypass for Git over HTTP ([GHSA-cxgj-pv47-623m](https://github.com/thomiceli/opengist/security/advisories/GHSA-cxgj-pv47-623m))
+- Unlisted gists found through SQL `LIKE` wildcards and short UUIDs ([GHSA-cj4r-8jph-fj2r](https://github.com/thomiceli/opengist/security/advisories/GHSA-cj4r-8jph-fj2r))
+- Private gist content in 404 page metadata ([GHSA-v3mc-8qrc-4783](https://github.com/thomiceli/opengist/security/advisories/GHSA-v3mc-8qrc-4783))
+- Admin configuration page rendered without login through `/assets` ([GHSA-mvf3-jgxj-234c](https://github.com/thomiceli/opengist/security/advisories/GHSA-mvf3-jgxj-234c))
+- Expired gists still readable through the API, Git and SSH ([GHSA-vwph-vv8j-r7c2](https://github.com/thomiceli/opengist/security/advisories/GHSA-vwph-vv8j-r7c2))
+- Sessions kept after a password change ([GHSA-gpv4-fhpg-j56g](https://github.com/thomiceli/opengist/security/advisories/GHSA-gpv4-fhpg-j56g))
+- Private gist content exposed through same-site JavaScript embeds ([GHSA-q5gv-w47x-g49j](https://github.com/thomiceli/opengist/security/advisories/GHSA-q5gv-w47x-g49j))
+- Search index not updated after API edits, exposing gists made private or unlisted ([GHSA-r2m8-gcqg-5xvm](https://github.com/thomiceli/opengist/security/advisories/GHSA-r2m8-gcqg-5xvm))
+- OAuth unlink and logout through cross-site GET requests ([GHSA-r94p-cgwr-fq9w](https://github.com/thomiceli/opengist/security/advisories/GHSA-r94p-cgwr-fq9w))
+
+### Breaking changes
+- Users with MFA (TOTP or passkey) must use an access token or SSH for Git over HTTP, their password is refused
+- Short UUIDs only work for public gists, unlisted and private gists need their full UUID or custom URL
+- `GET /-/logout` and `GET /oauth/:provider/unlink` are removed, logging out and unlinking an OAuth account require a POST request with the CSRF token (check reverse proxy or SSO logout redirects)
+- LDAP: first logins are refused when the username contains whitespace or `/ \ : ? # %`, ends with a dot, or is a reserved name. For example, a `cn` like "John Smith" can't create an account anymore
+
+### Changed
+- Changing the password logs out the other sessions
+- An OAuth account can't be unlinked when it's the only way to log in
+- Private gists can't be embedded (`.js`) or fetched (`.json`) from another origin
+- Expired gists are hidden everywhere as soon as they expire, and the cleanup also runs at startup
+
+### Other
+- Update Go & JS deps (#856)
+- Update docs deps (#857)
+
+> Admins of Opengist instances may want to run "Rebuild search index" in the admin panel.
+> 
+> If you use LDAP, look for usernames containing `/`, `\`, `(`, `)` or `*`, which can come from GHSA-883q-jwxx-r7hv. Accounts with `/` or `\` in their username can't be deleted from Opengist anymore and need a manual cleanup
+
+## [1.15.3](https://github.com/thomiceli/opengist/compare/v1.15.2...v1.15.3) - 2026-10-21
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Added
+- Copy button on fenced code blocks in rendered Markdown (#801) (#838)
+- OAuth signup through invitation links (#812)
+
+### Fixed
+- Return 413 for oversized gist forms (#805)
+- Percent-encoded Unicode topic paths (#810)
+- Missing list markers in rendered Markdown (#811)
+- Apply database migrations inside their transaction (#817)
+- Render the error page when settings fail to load (#823)
+- Don't report a user's own OAuth account as linked to another user (#826)
+- Render the uploaded file name as text on the create page (#830)
+- Missing flash messages on plain-HTTP deployments (#834)
+- User deletion (#836)
+
+### Docs
+- Add MASH playbook to community resources (#822)
+- Fix typo in configuration cheat sheet (#825)
+
+### Other
+- Update Go & JS deps (#841)
+
+## [1.15.2](https://github.com/thomiceli/opengist/compare/v1.15.1...v1.15.2) - 2026-08-30
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Added
+- Anonymous LDAP user search (#794)
+
+### Fixed
+- Prevent writes through symbolic links in gists (#799)
+- Prevent server crashes when rendering empty CSV files
+- Invalid header handling in Git `cat-file` batch reader (#802)
+- Overlapping headers in narrow embeds (#803)
+
+## [1.15.1](https://github.com/thomiceli/opengist/compare/v1.15.0...v1.15.1) - 2026-08-04
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Fixed
+- Admin pagination with new URLs (#782)
+- Stop unbounded diff content growth for large files (#787)
+
+## [1.15.0](https://github.com/thomiceli/opengist/compare/v1.14.0...v1.15.0) - 2026-07-30
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Added
+- UI rework (#757)
+- Gist settings page, with metadata edition and danger zone (#757)
+- Explore users page, with search and sorting (#757)
+- Explore topics page (#757)
+
+### Changed
+- Move reserved routes under the `/-/` prefix: `/-/login`, `/-/register`, `/-/all`, `/-/search`, `/-/topics`, `/:user/-/liked`, ... (#757)
+
+### Fixed
+- Improve Git dumb HTTP security (#780)
+- OIDC scope includes trailing whitespace if groups not configured (#775)
+- Return 200 for `HEAD /` so uptime monitors don't fail (#773)
+- Bind strategy configuration to deployment in Helm chart (#777)
+- `OG_OPENGIST_HOME` env var in Dockerfile (#779)
+
+### Other
+- Update deps (#776)
+
+## [1.14.0](https://github.com/thomiceli/opengist/compare/v1.13.1...v1.14.0) - 2026-07-21
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Added
+- Gist expiration + scheduled actions (#726)
+- Archive gists (#739)
+- Avatar upload (#730)
+- Push to gists with access tokens (#752)
+- Seed user/admin account via CLI (#750)
+- Open Graph and Twitter Card meta tags on gist pages (#756)
+- OpenSSH support (#735)
+- PKCE for OAuth providers (#720)
+- GitHub alerts in Markdown (#721)
+- Mermaid (`.mmd`) file rendering support (#741)
+- Syntax highlighting for Salesforce Apex language (#725)
+- Codemirror highlighting and comment shortcut (#742)
+- Confirmation prompt before deleting a file in the editor (#740)
+- Default sort gists user preference (#744)
+- Embedding light, dark and auto themes (#718)
+- Allow copying embedded gists (#719)
+- Option to disable file upload (#737)
+- `HEAD` endpoint for raw and download file (#748)
+- Log path config (#745)
+- PostgreSQL & MySQL socket connections (#733)
+- IPv6 literals support (#749)
+- Allow underscores in usernames (#703)
+- `rel="canonical"` link tag (#732)
+- Rootless Docker image (#716)
+- Korean (ko-KR) translation (#767)
+
+### Fixed
+- Improve Git handler security (#769)
+- Improve git `/init` with correlation token (#751)
+- Fix fatal startup error on unparseable git version (#731)
+- Fix actions db (#761)
+- Move users avatar directory (#760)
+- Better handler for committed HTTP responses (#734)
+- Sanitize DOM for ipynb rendering (#736)
+- Add `no-store` header for embedded js (#724)
+- Make ssh import failure a warning (#705)
+
+### Other
+- Package prebuilt frontend assets as webdist tarball (#768)
+- Update deps (#762)
+- Update community page with Pi share extension + gistviewer links (#755)
+
+## [1.13.1](https://github.com/thomiceli/opengist/compare/v1.13.0...v1.13.1) - 2026-06-10
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Fixed
+- Embedding fix vertical scrolling and improve padding (#714)
+- Fix CSS url for json embed url (#715)
+
+## [1.13.0](https://github.com/thomiceli/opengist/compare/v1.12.2...v1.13.0) - 2026-06-09
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Added
+- REST API (#707) (#711) (#702)
+- Limit display if there is too much files in one gist (#701)
+- Topics git push option in post-receive hook (#698)
+- Allow embedding Gists for a certain file only (#709)
+- Arabic Translation (#706)
+
+### Fixed
+- Server SSH key generation (#708)
+
+### Other
+- Update deps Golang, JS, Docker deps (#713)
+- New docs website (#710)
+
+## [1.12.2](https://github.com/thomiceli/opengist/compare/v1.12.1...v1.12.2) - 2026-03-14
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Added
+- Search all fields (#622)
+- Display a form to create an Opengist account coming from a OAuth provider (#623)
+- Rebuild search index in admin options (#647)
+
+### Fixed
+- Clean file path names on file creation (#624)
+- Support UTF-8 on gist download (#625)
+- CSRF skipper only for GET *.js request (#627)
+- Async-loaded gist embed scripts (#630)
+- Make gists username/urls case insensitive in URLS (#641)
+- Improve code search and index tests (#663)
+- Translation strings (#659)
+- Gitea avatar URL on OAuth (#674)
+
+### [Helm Chart](helm/opengist)
+- Add environment variables and secrets to statefulset (#644)
+
+> Admins of Opengist instances may want to run "Rebuild search index" in the admin panel.
+
+## [1.12.1](https://github.com/thomiceli/opengist/compare/v1.12.0...v1.12.1) - 2026-02-03
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Added
+- More translation strings (#605)
+
+### Fixed
+- Allow Access Tokens with Required Login (#611)
+- Make text files renderable with mimetypes different than text/plain (#612)
+- Improve security on raw files endpoint (#613)
+
+> Admins of Opengist instances may want to run "Synchronize all gists previews" in the admin panel.
+
+## [1.12.0](https://github.com/thomiceli/opengist/compare/v1.11.1...v1.12.0) - 2026-01-27
+See here how to [update](https://opengist.io/docs/update) Opengist.
+
+### Added
+- Access tokens (#602)
+- Fuzzy search for gist search (#555)
+- Allow Unicode letters/numbers in topics (#597)
+- Resize editor height (#600)
+- More translation strings (#516) (#604)
+
+### Fixed
+- Don't panic on Go TCP errors (#601)
+
+### Other
+- Reduce footprint of Docker image (#515)
+- Update Go + JS deps (#603)
+- Configure Dependabot for updates on Go and NPM (#449)
+
+### [Helm Chart](helm/opengist)
+- Use existing pvc claim of provided (#547)
+- Adds StatefulSet support (#549)
+- Move Prom metrics to a dedicated port + support ServiceMonitor (#599)
+
 ## [1.11.1](https://github.com/thomiceli/opengist/compare/v1.11.0...v1.11.1) - 2025-09-30
 See here how to [update](https://opengist.io/docs/update) Opengist.
 

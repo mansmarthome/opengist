@@ -7,6 +7,7 @@ import (
 	htmlpkg "html"
 	"html/template"
 	"io"
+	"io/fs"
 	"net/http"
 	"net/url"
 	"path/filepath"
@@ -29,9 +30,28 @@ import (
 
 type Template struct {
 	templates *template.Template
+	// pages holds layout-based templates, keyed by file name (e.g. "all.html").
+	// Each entry is a clone of the base layout with that page's "content" block parsed in.
+	pages map[string]*template.Template
+	// customPages holds the file names of the templates parsed from $OPENGIST_HOME/custom.
+	customPages map[string]bool
 }
 
+// customPagePrefix marks a template name passed to Render as a file from
+// $OPENGIST_HOME/custom (e.g. "custom/legal.html"). Such a name only resolves to
+// that file, never to a built-in page, layout or partial.
+const customPagePrefix = "custom/"
+
 func (t *Template) Render(w io.Writer, name string, data interface{}, _ echo.Context) error {
+	if customName, ok := strings.CutPrefix(name, customPagePrefix); ok {
+		if !t.customPages[customName] {
+			return fmt.Errorf("custom template %q not found", customName)
+		}
+		return t.templates.ExecuteTemplate(w, customName, data)
+	}
+	if tmpl, ok := t.pages[name]; ok {
+		return tmpl.ExecuteTemplate(w, "base", data)
+	}
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
@@ -59,6 +79,9 @@ func (s *Server) setFuncMap() {
 		"isMarkdown": func(i string) bool {
 			return strings.ToLower(filepath.Ext(i)) == ".md"
 		},
+		"isMermaid": func(i string) bool {
+			return strings.ToLower(filepath.Ext(i)) == ".mmd"
+		},
 		"isJupyter": func(i string) bool {
 			return strings.ToLower(filepath.Ext(i)) == ".ipynb"
 		},
@@ -70,6 +93,10 @@ func (s *Server) setFuncMap() {
 			return strings.Trim(re.ReplaceAllString(strings.ToLower(s), "-"), "-")
 		},
 		"avatarUrl": func(user *db.User, noGravatar bool) string {
+			if user.HasUploadedAvatar() {
+				return fmt.Sprintf("%s/avatar/%s", config.C.ExternalUrl, user.AvatarURL)
+			}
+
 			if user.AvatarURL != "" {
 				return user.AvatarURL
 			}
@@ -91,6 +118,12 @@ func (s *Server) setFuncMap() {
 				return "http://localhost:16157/" + file
 			}
 			return config.C.ExternalUrl + "/" + context.ManifestEntries[file].File
+		},
+		"assetCss": func(file string) string {
+			if s.dev {
+				return "http://localhost:16157/" + file
+			}
+			return config.C.ExternalUrl + "/" + context.ManifestEntries[file].Css[0]
 		},
 		"custom": func(file string) string {
 			assetpath, err := url.JoinPath("/", "assets", file)
@@ -141,7 +174,10 @@ func (s *Server) setFuncMap() {
 			return dict, nil
 		},
 		"addMetadataToSearchQuery": func(input, key, value string) string {
-			content, metadata := handlers.ParseSearchQueryStr(input)
+			metadata := handlers.ParseSearchQueryStr(input)
+			// extract free-text content (stored under "all") and remove it from metadata
+			content := metadata["all"]
+			delete(metadata, "all")
 
 			metadata[key] = value
 
@@ -158,40 +194,7 @@ func (s *Server) setFuncMap() {
 			return strings.TrimSpace(resultBuilder.String())
 		},
 		"canonicalURL": func(u *url.URL) string {
-			if u == nil {
-				return ""
-			}
-			originalQ := u.Query()
-
-			// Whitelist of known meaningful parameters
-			whitelist := map[string]bool{
-				"q":          true, // search query
-				"sort":       true,
-				"order":      true,
-				"title":      true,
-				"language":   true,
-				"visibility": true,
-				"topics":     true,
-			}
-
-				newQ := url.Values{}
-				for key := range originalQ {
-					if whitelist[key] {
-						value := originalQ.Get(key)
-						// Skip defaults for sort/order (they represent the same view as no params)
-						if (key == "sort" && value == "created") || (key == "order" && value == "desc") {
-							continue
-						}
-						newQ.Set(key, value)
-					}
-				}
-
-				path := u.Path
-				query := newQ.Encode()
-				if query != "" {
-					return config.C.ExternalUrl + path + "?" + query
-				}
-				return config.C.ExternalUrl + path
+			return canonicalURL(config.C.ExternalUrl, u)
 		},
 		"indexEnabled": index.IndexEnabled,
 		"isUrl": func(s string) bool {
@@ -208,6 +211,18 @@ func (s *Server) setFuncMap() {
 			}
 			return str
 		},
+		// ogText collapses all whitespace (newlines, tabs, multiple spaces) into
+		// single spaces and truncates to maxRunes runes, appending an ellipsis when
+		// truncated. Used to build clean values for Open Graph / Twitter meta tags
+		// from multi-line gist descriptions or code previews.
+		"ogText": func(s string, maxRunes int) string {
+			collapsed := strings.Join(strings.Fields(s), " ")
+			runes := []rune(collapsed)
+			if len(runes) <= maxRunes {
+				return collapsed
+			}
+			return string(runes[:maxRunes]) + "\u2026"
+		},
 		"hexToRgb": func(hex string) string {
 			h, _ := strconv.ParseUint(strings.TrimPrefix(hex, "#"), 16, 32)
 			return fmt.Sprintf("%d, %d, %d,", (h>>16)&0xFF, (h>>8)&0xFF, h&0xFF)
@@ -222,35 +237,116 @@ func (s *Server) setFuncMap() {
 		"humanDate": func(t int64) string {
 			return time.Unix(t, 0).Format("02/01/2006 15:04")
 		},
+		"humanDateOnly": func(t int64) string {
+			return time.Unix(t, 0).Format("02/01/2006")
+		},
+		"mainTheme": func(theme *db.UserStyleDTO) string {
+			if theme == nil {
+				return "auto"
+			}
+
+			if theme.Theme == "" {
+				return "auto"
+			}
+
+			return theme.Theme
+		},
 	}
 
-	t := template.Must(template.New("t").Funcs(fm).ParseFS(templates.Files, "*/*.html"))
+	base := template.Must(template.New("base").Funcs(fm).ParseFS(templates.Files, "layouts/*.html", "partials/*.html"))
+	pagePaths, err := fs.Glob(templates.Files, "pages/*.html")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to glob new page templates")
+	}
+	pages := make(map[string]*template.Template, len(pagePaths))
+	for _, p := range pagePaths {
+		cloned := template.Must(base.Clone())
+		pages[filepath.Base(p)] = template.Must(cloned.ParseFS(templates.Files, p))
+	}
+
+	customTemplates := template.Must(base.Clone())
 	customPattern := filepath.Join(config.GetHomeDir(), "custom", "*.html")
 	matches, err := filepath.Glob(customPattern)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to check for custom templates")
 	}
+	customPages := make(map[string]bool, len(matches))
 	if len(matches) > 0 {
-		t, err = t.ParseGlob(customPattern)
+		customTemplates, err = customTemplates.ParseFiles(matches...)
 		if err != nil {
 			log.Fatal().Err(err).Msg("Failed to parse custom templates")
 		}
+		for _, m := range matches {
+			customPages[filepath.Base(m)] = true
+		}
 	}
+
 	s.echo.Renderer = &Template{
-		templates: t,
+		templates:   customTemplates,
+		pages:       pages,
+		customPages: customPages,
 	}
 }
 
 func (s *Server) parseManifestEntries() {
-	file, err := public.Files.Open("manifest.json")
+	entries, err := parseManifest(public.Files)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to open manifest.json")
+		log.Fatal().Err(err).Msg("Failed to load manifest.json")
 	}
+	context.ManifestEntries = entries
+}
+
+func parseManifest(files fs.FS) (map[string]context.Asset, error) {
+	file, err := files.Open(".vite/manifest.json")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
 	byteValue, err := io.ReadAll(file)
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to read manifest.json")
+		return nil, err
 	}
-	if err = gojson.Unmarshal(byteValue, &context.ManifestEntries); err != nil {
-		log.Fatal().Err(err).Msg("Failed to unmarshal manifest.json")
+
+	entries := make(map[string]context.Asset)
+	if err = gojson.Unmarshal(byteValue, &entries); err != nil {
+		return nil, err
 	}
+	return entries, nil
+}
+
+// canonicalURL builds the fork canonical URL. page is omitted, and default
+// sort/order values are dropped so they collapse to the unparameterized URL.
+func canonicalURL(base string, u *url.URL) string {
+	if u == nil {
+		return ""
+	}
+
+	whitelist := map[string]bool{
+		"q":          true,
+		"sort":       true,
+		"order":      true,
+		"title":      true,
+		"language":   true,
+		"visibility": true,
+		"topics":     true,
+	}
+
+	originalQ := u.Query()
+	newQ := url.Values{}
+	for key := range originalQ {
+		if !whitelist[key] {
+			continue
+		}
+		value := originalQ.Get(key)
+		if (key == "sort" && value == "created") || (key == "order" && value == "desc") {
+			continue
+		}
+		newQ.Set(key, value)
+	}
+
+	if query := newQ.Encode(); query != "" {
+		return base + u.Path + "?" + query
+	}
+	return base + u.Path
 }

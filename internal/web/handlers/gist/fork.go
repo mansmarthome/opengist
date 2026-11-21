@@ -2,12 +2,13 @@ package gist
 
 import (
 	"errors"
+	"strings"
+
 	"github.com/google/uuid"
 	"github.com/thomiceli/opengist/internal/db"
 	"github.com/thomiceli/opengist/internal/web/context"
 	"github.com/thomiceli/opengist/internal/web/handlers"
 	"gorm.io/gorm"
-	"strings"
 )
 
 func Fork(ctx *context.Context) error {
@@ -34,7 +35,7 @@ func Fork(ctx *context.Context) error {
 	}
 
 	newGist := &db.Gist{
-		Uuid:            strings.Replace(uuidGist.String(), "-", "", -1),
+		Uuid:            strings.ReplaceAll(uuidGist.String(), "-", ""),
 		Title:           gist.Title,
 		Preview:         gist.Preview,
 		PreviewFilename: gist.PreviewFilename,
@@ -72,7 +73,7 @@ func Forks(ctx *context.Context) error {
 		fromUserID = currentUser.ID
 	}
 
-	forks, err := gist.GetForks(fromUserID, pageInt-1)
+	forks, err := gist.GetForks(fromUserID, pageInt-1, 11, 10)
 	if err != nil {
 		return ctx.ErrorRes(500, "Error getting users who liked this gist", err)
 	}
@@ -81,6 +82,7 @@ func Forks(ctx *context.Context) error {
 		return ctx.ErrorRes(404, ctx.Tr("error.page-not-found"), nil)
 	}
 
+	ctx.SetData("page", "forks")
 	ctx.SetData("htmlTitle", ctx.TrH("gist.forks.for", gist.Title))
 	ctx.SetData("revision", "HEAD")
 	return ctx.Html("forks.html")

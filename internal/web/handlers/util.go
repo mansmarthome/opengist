@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/schema"
-
+	"github.com/rs/zerolog/log"
 	"github.com/thomiceli/opengist/internal/web/context"
 )
 
@@ -81,27 +81,32 @@ func (p PaginationParams) WithParams(pairs ...string) template.URL {
 }
 
 func Paginate[T any](ctx *context.Context, data []*T, pageInt int, perPage int, templateDataName string, urlPage string, labels int, params *PaginationParams) error {
-	var paginationParams PaginationParams
-	if params == nil {
-		paginationParams = PaginationParams{}
-	} else {
-		paginationParams = *params
-	}
-	paginationParams.Page = pageInt
 	lenData := len(data)
 	if lenData == 0 && pageInt != 1 {
 		return errors.New("page not found")
 	}
 
-	if lenData > perPage {
-		if lenData > 1 {
-			data = data[:lenData-1]
-		}
-		paginationParams.HasNext = true
+	hasNext := lenData > perPage
+	if hasNext && lenData > 1 {
+		data = data[:lenData-1]
 	}
-	if pageInt > 1 {
-		paginationParams.HasPrevious = true
+
+	SetPagination(ctx, pageInt, hasNext, urlPage, labels, params)
+	ctx.SetData(templateDataName, data)
+	return nil
+}
+
+// SetPagination sets the template data for the pagination links of a page.
+// Paginate calls it once it knows from the data whether there is a next page;
+// handlers that know it some other way can call it directly.
+func SetPagination(ctx *context.Context, pageInt int, hasNext bool, urlPage string, labels int, params *PaginationParams) {
+	var paginationParams PaginationParams
+	if params != nil {
+		paginationParams = *params
 	}
+	paginationParams.Page = pageInt
+	paginationParams.HasNext = hasNext
+	paginationParams.HasPrevious = pageInt > 1
 
 	ctx.SetData("pagination", paginationParams)
 
@@ -115,14 +120,18 @@ func Paginate[T any](ctx *context.Context, data []*T, pageInt int, perPage int, 
 	}
 
 	ctx.SetData("urlPage", urlPage)
-	ctx.SetData(templateDataName, data)
-	return nil
 }
 
-func ParseSearchQueryStr(query string) (string, map[string]string) {
+// ParseSearchQueryStr parses a search query string and returns a map of metadata.
+// The query string is split into words and each word is checked if it contains a colon (:).
+// If a word contains a colon, it is split into a key-value pair and added to the metadata map.
+// If a word does not contain a colon, it is added to an "all" key in the metadata map.
+// The "all" key is used to search all fields in the index.
+// The function returns the metadata map.
+func ParseSearchQueryStr(query string) map[string]string {
 	words := strings.Fields(query)
 	metadata := make(map[string]string)
-	var contentBuilder strings.Builder
+	var allFieldsBuilder strings.Builder
 
 	for _, word := range words {
 		if strings.Contains(word, ":") {
@@ -133,10 +142,18 @@ func ParseSearchQueryStr(query string) (string, map[string]string) {
 				metadata[key] = value
 			}
 		} else {
-			contentBuilder.WriteString(word + " ")
+			// Add to content search by default
+			allFieldsBuilder.WriteString(word + " ")
 		}
 	}
 
-	content := strings.TrimSpace(contentBuilder.String())
-	return content, metadata
+	// Set the default search field
+	allContent := strings.TrimSpace(allFieldsBuilder.String())
+	if allContent != "" {
+		metadata["default"] = allContent
+	}
+
+	log.Debug().Msgf("Metadata: %v", metadata)
+
+	return metadata
 }

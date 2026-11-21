@@ -1,0 +1,148 @@
+:root,
+.dark {
+    --theme-color: #cc3336;
+    --radius: 0px;
+    --radius-sm: 0px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+    --radius-xl: 0px;
+    --radius-2xl: 0px;
+    --radius-3xl: 0px;
+}
+
+.shadow-xs,
+.shadow-sm,
+.shadow,
+.shadow-md,
+.shadow-lg {
+    box-shadow: none;
+}
+
+.markdown-body a,
+.dark .markdown-body a {
+    color: inherit;
+    text-decoration: none;
+    box-shadow: inset 0 -2px 0 #cc3336;
+    transition: box-shadow 0.1s ease-out;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.dark .markdown-body a:hover,
+.dark .markdown-body a:focus {
+    box-shadow: inset 0 -3px 0 #cc3336;
+}
+
+#comments {
+    margin-top: 1rem;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    font-size: 10px;
+    --waline-font-size: 1.4em;
+    --waline-theme-color: #cc3336;
+    --waline-active-color: color-mix(in srgb, #cc3336 92%, transparent);
+    --waline-border-color: var(--border);
+}
+
+#comments .wl-reaction {
+    overflow: initial;
+}
+
+#comments .wl-reaction-text,
+#comments .wl-count .wl-num,
+#comments .wl-footer .wl-info .wl-text-number,
+#comments .wl-card > .wl-content > p {
+    display: none;
+}
+
+#comments .wl-header {
+    display: block;
+}
+
+#comments .wl-header-item {
+    margin: .25em 0;
+    flex-wrap: wrap;
+}
+
+#comments .wl-header input,
+#comments .wl-header label,
+#comments .wl-header .wl-editor {
+    font-size: .9em;
+}
+
+#comments .wl-editor,
+#comments .wl-header input {
+    box-sizing: border-box;
+    padding: .3em;
+    margin: .5em;
+    box-shadow: none;
+    outline: none;
+}
+
+#comments .wl-header label {
+    min-width: 0;
+    padding: 0;
+    margin: .8em;
+}
+
+#comments .wl-header label::after {
+    content: ":";
+}
+
+#comments .wl-header-item:last-child::after {
+    content: "Укажите email, чтобы узнать о новых ответах на ваш комментарий 👆";
+    flex-grow: 1;
+    flex-basis: 100%;
+    margin: .8em;
+    font-size: .9em;
+}
+
+#comments .wl-action {
+    margin-right: 6px;
+}
+
+#comments .wl-panel,
+#comments .wl-editor {
+    border-radius: 0;
+}
+
+#comments .wl-footer .wl-actions {
+    justify-content: space-between;
+}
+
+#comments .wl-footer .wl-info {
+    flex-grow: 0;
+    flex-shrink: 1;
+}
+
+#comments .wl-footer .wl-btn {
+    font-size: 1em;
+    border-radius: 4em;
+    padding-left: 1.25em;
+    padding-right: 1.25em;
+    color: white;
+}
+
+#comments .wl-card .wl-content {
+    font-size: 1em;
+}
+
+#comments .wl-card .wl-content .hljs .lines {
+    display: none;
+}
+
+#comments .wl-card .wl-quote {
+    border: 0;
+}
+
+#comments .wl-card > .wl-content > div > :first-child {
+    margin-top: 0;
+}
+
+#comments .wl-card > .wl-content > div > :last-child {
+    margin-bottom: 0;
+}
+
+#comments [data-waline] li {
+    color: var(--waline-color);
+}

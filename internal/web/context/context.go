@@ -2,6 +2,7 @@ package context
 
 import (
 	"context"
+	"fmt"
 	"html/template"
 	"net/http"
 	"sync"
@@ -17,6 +18,19 @@ import (
 type dataKey string
 
 const DataKeyStr dataKey = "data"
+
+type HTTPError struct {
+	Internal error       `json:"-"`
+	Message  interface{} `json:"message"`
+	Code     int         `json:"status"`
+}
+
+func (he *HTTPError) Error() string {
+	if he.Internal == nil {
+		return fmt.Sprintf("code=%d, message=%v", he.Code, he.Message)
+	}
+	return fmt.Sprintf("code=%d, message=%v, internal=%v", he.Code, he.Message, he.Internal)
+}
 
 type Context struct {
 	echo.Context
@@ -58,18 +72,22 @@ func (ctx *Context) DataMap() echo.Map {
 }
 
 func (ctx *Context) ErrorRes(code int, message string, err error) error {
+	return ctx.errorRes(code, message, err)
+}
+
+func (ctx *Context) errorRes(code int, message string, err error) error {
 	if code >= 500 && err != nil {
-		var skipLogger = log.With().CallerWithSkipFrameCount(3).Logger()
+		var skipLogger = log.With().CallerWithSkipFrameCount(4).Logger()
 		skipLogger.Error().Err(err).Msg(message)
 	}
 
 	ctx.SetRequest(ctx.Request().WithContext(context.WithValue(ctx.Request().Context(), DataKeyStr, ctx.data)))
 
-	return &echo.HTTPError{Code: code, Message: message, Internal: err}
+	return &HTTPError{Code: code, Message: message, Internal: err}
 }
 
 func (ctx *Context) RedirectTo(location string) error {
-	return ctx.Context.Redirect(302, config.C.ExternalUrl+location)
+	return ctx.Redirect(302, config.C.ExternalUrl+location)
 }
 
 func (ctx *Context) Html(template string) error {
@@ -87,6 +105,11 @@ func (ctx *Context) Json(data any) error {
 
 func (ctx *Context) JsonWithCode(code int, data any) error {
 	return ctx.JSON(code, data)
+}
+
+func (ctx *Context) ErrorJson(code int, message string, err error) error {
+	ctx.SetData("err_render", "json")
+	return ctx.errorRes(code, message, err)
 }
 
 func (ctx *Context) PlainText(code int, message string) error {
@@ -145,5 +168,6 @@ func (ctx *Context) Tr(key string, args ...any) string {
 var ManifestEntries map[string]Asset
 
 type Asset struct {
-	File string `json:"file"`
+	File string   `json:"file"`
+	Css  []string `json:"css"`
 }
