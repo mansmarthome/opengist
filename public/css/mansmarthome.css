@@ -83,9 +83,19 @@
     border-color: #3b3d40 !important;
 }
 
+html:not(.dark) .markdown-body {
+    color: #222426 !important;
+}
+
+.dark .markdown-body {
+    color: #e1e3e6 !important;
+}
+
 .dark .markdown-body pre,
-.dark .markdown-body .highlight pre {
-    background-color: #656c7633 !important;
+.dark .markdown-body .highlight pre,
+.dark .markdown-body pre code {
+    background-color: #16181a !important;
+    color: #e1e3e6;
 }
 
 .badge-secondary,

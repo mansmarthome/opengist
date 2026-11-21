@@ -2,6 +2,8 @@
 @import "basecoat-css";
 
 @import "globals.css";
+@import "./github.css";
+@import "./github-dark.css";
 @import "code-copy.css";
 @import "ipynb.css";
 @import "mansmarthome.css";
