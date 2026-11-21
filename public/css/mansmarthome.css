@@ -1,6 +1,10 @@
 :root,
 .dark {
     --theme-color: #cc3336;
+    --primary: #cc3336;
+    --primary-foreground: #ffffff;
+    --ring: #cc3336;
+    --sidebar-ring: #cc3336;
     --radius: 0px;
     --radius-sm: 0px;
     --radius-md: 0px;
@@ -8,6 +12,61 @@
     --radius-xl: 0px;
     --radius-2xl: 0px;
     --radius-3xl: 0px;
+}
+
+:root {
+    --background: #ffffff;
+    --foreground: #222426;
+    --card: #ffffff;
+    --card-foreground: #222426;
+    --popover: #ffffff;
+    --popover-foreground: #222426;
+    --secondary: #f7f8fa;
+    --secondary-foreground: #222426;
+    --muted: #f7f8fa;
+    --muted-foreground: #73777d;
+    --accent: #f7f8fa;
+    --accent-foreground: #222426;
+    --border: #e1e3e6;
+    --input: #e1e3e6;
+    --content: #ffffff;
+    --sidebar: #f7f8fa;
+    --sidebar-foreground: #222426;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #e1e3e6;
+    --sidebar-hover: #e1e3e6;
+    --sidebar-accent-foreground: #222426;
+    --sidebar-border: #e1e3e6;
+}
+
+.dark {
+    --background: #222426;
+    --foreground: #e1e3e6;
+    --card: #1d1f20;
+    --card-foreground: #e1e3e6;
+    --popover: #1d1f20;
+    --popover-foreground: #e1e3e6;
+    --secondary: #1d1f20;
+    --secondary-foreground: #e1e3e6;
+    --muted: #1d1f20;
+    --muted-foreground: #909499;
+    --accent: #3b3d40;
+    --accent-foreground: #e1e3e6;
+    --border: #3b3d40;
+    --input: #3b3d40;
+    --content: #222426;
+    --sidebar: #1d1f20;
+    --sidebar-foreground: #e1e3e6;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #3b3d40;
+    --sidebar-hover: #3b3d40;
+    --sidebar-accent-foreground: #e1e3e6;
+    --sidebar-border: #3b3d40;
+}
+
+.dark .text-primary,
+.dark .hover\:text-primary:hover {
+    color: #cc3336;
 }
 
 .shadow-xs,
@@ -18,10 +77,27 @@
     box-shadow: none;
 }
 
+:is([class^="btn"], [class*=" btn"]),
+:is([class^="btn"], [class*=" btn"]):is(:hover, :focus, :focus-visible, :active) {
+    box-shadow: none;
+    --tw-ring-shadow: 0 0 #0000;
+}
+
+.input:is(:focus, :focus-visible),
+textarea.input:is(:focus, :focus-visible),
+select:is(:focus, :focus-visible),
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="color"]):is(:focus, :focus-visible),
+textarea:is(:focus, :focus-visible) {
+    border-color: #cc3336 !important;
+    box-shadow: none !important;
+    outline: none;
+    --tw-ring-shadow: 0 0 #0000;
+}
+
 .markdown-body a,
 .dark .markdown-body a {
-    color: inherit;
-    text-decoration: none;
+    color: inherit !important;
+    text-decoration: none !important;
     box-shadow: inset 0 -2px 0 #cc3336;
     transition: box-shadow 0.1s ease-out;
 }
@@ -30,6 +106,8 @@
 .markdown-body a:focus,
 .dark .markdown-body a:hover,
 .dark .markdown-body a:focus {
+    color: inherit !important;
+    text-decoration: none !important;
     box-shadow: inset 0 -3px 0 #cc3336;
 }
 
