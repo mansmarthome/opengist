@@ -88,6 +88,13 @@
     background-color: #656c7633 !important;
 }
 
+.badge-secondary,
+a.badge-secondary:hover,
+.badge-secondary:hover {
+    background-color: #cc3336;
+    color: #ffffff;
+}
+
 .shadow-xs,
 .shadow-sm,
 .shadow,
