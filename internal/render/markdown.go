@@ -119,7 +119,7 @@ func newMarkdownWithCodeBlockWrapper(wrapper highlighting.WrapperRenderer, extra
 	extensions := []goldmark.Extender{
 		extension.GFM,
 		highlighting.NewHighlighting(
-			highlighting.WithStyle("catppuccin-latte"),
+			highlighting.WithStyle("github"),
 			highlighting.WithFormatOptions(html.WithClasses(true)),
 			highlighting.WithWrapperRenderer(wrapper),
 		),

@@ -69,6 +69,25 @@
     color: #cc3336;
 }
 
+.dark .markdown-body table tr {
+    background-color: transparent !important;
+    border-color: #3b3d40 !important;
+}
+
+.dark .markdown-body table tr:nth-child(2n) {
+    background-color: #1d1f20 !important;
+}
+
+.dark .markdown-body table th,
+.dark .markdown-body table td {
+    border-color: #3b3d40 !important;
+}
+
+.dark .markdown-body pre,
+.dark .markdown-body .highlight pre {
+    background-color: #656c7633 !important;
+}
+
 .shadow-xs,
 .shadow-sm,
 .shadow,
