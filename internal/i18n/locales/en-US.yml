@@ -332,6 +332,7 @@ error.gist-form-too-large: Gist form exceeds the 10 MB request limit
 error.comments-disabled: Comments are disabled
 
 header.menu.all: All
+header.menu.explore: Explore
 header.menu.new: New
 header.menu.topics: Topics
 header.menu.users: Users

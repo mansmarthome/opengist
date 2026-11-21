@@ -51,6 +51,8 @@ gist.edit.save: Сохранить
 
 gist.list.joined: Зарегистрирован
 gist.list.all: Все фрагменты
+gist.list.recently-liked: Недавно понравившиеся
+gist.list.recently-forked: Недавно ответвлённые
 gist.list.search-results: Результаты поиска
 gist.list.sort: Сортировка
 gist.list.sort-by-created: созданные
@@ -66,6 +68,8 @@ gist.list.forks: форк(-ов)
 gist.list.files: файл(-ов)
 gist.list.last-active: Последняя активность
 gist.list.no-gists: Нет фрагментов
+gist.list.topics: Темы
+gist.list.users: Пользователи
 
 gist.forks: Форки
 gist.forks.view: Посмотреть форк
@@ -120,7 +124,10 @@ auth.oauth: Войти с помощью доступа %s
 error: Ошибка
 
 header.menu.all: Все
+header.menu.explore: Обзор
 header.menu.new: Новый
+header.menu.topics: Темы
+header.menu.users: Пользователи
 header.menu.search: Поиск
 header.menu.my-gists: Мои фрагменты
 header.menu.liked: Понравившиеся
@@ -133,6 +140,7 @@ header.menu.light: Светлая
 header.menu.dark: Тёмная
 header.menu.system: Системная
 footer.powered-by: Работает на %s
+sidebar.collapse: Свернуть
 
 pagination.older: Позже
 pagination.newer: Новее

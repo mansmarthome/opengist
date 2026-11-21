@@ -199,11 +199,6 @@
                     </div>
                 </div>
             </div>
-            {{ else }}
-            <a href="{{ .c.ExternalUrl }}/-/login" class="btn-sm">{{ .locale.Tr "header.menu.login" }}</a>
-            {{ if not .DisableSignup }}
-            <a href="{{ .c.ExternalUrl }}/-/register" class="btn-sm-outline">{{ .locale.Tr "header.menu.register" }}</a>
-            {{ end }}
             {{ end }}
         </div>
     </header>
