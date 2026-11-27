@@ -34,27 +34,6 @@
 
             {{ if .gist.Description }}<p class="mt-2 text-sm break-words">{{ .gist.Description }}</p>{{ end }}
         </div>
-
-        <div class="text-muted-foreground flex shrink-0 items-center gap-3 text-sm">
-            <span class="inline-flex items-center gap-1" title="{{ .locale.Tr "gist.list.likes" }}">
-                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
-                {{ .gist.NbLikes }}
-            </span>
-            <span class="inline-flex items-center gap-1" title="{{ .locale.Tr "gist.list.forks" }}">
-                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="6" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M6 9v3a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V9M12 15v3"/></svg>
-                {{ .gist.NbForks }}
-            </span>
-            {{ if not .c.DisableComments }}
-            <span class="inline-flex items-center gap-1" title="{{ .locale.Tr "gist.list.comments" }}">
-                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                {{ .gist.NbComments }}
-            </span>
-            {{ end }}
-            <span class="inline-flex items-center gap-1" title="{{ .locale.Tr "gist.list.files" }}">
-                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-                {{ .gist.NbFiles }}
-            </span>
-        </div>
     </header>
 
     <a href="{{ .c.ExternalUrl }}/{{ .gist.User.Username }}/{{ .gist.Identifier }}" class="block border-t">
